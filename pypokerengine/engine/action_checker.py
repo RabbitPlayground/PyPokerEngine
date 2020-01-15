@@ -34,7 +34,10 @@ class ActionChecker:
         min_raise = self.__min_raise_amount(players, sb_amount)
         max_raise = players[player_pos].stack + players[player_pos].paid_sum()
         if max_raise < min_raise:
-            min_raise = max_raise = -1
+            if players[player_pos].stack + players[player_pos].paid_sum() > self.__fetch_last_raise(players)["amount"]:
+                min_raise = max_raise
+            else:
+                min_raise = max_raise = -1
         return [
             {"action": "fold", "amount": 0},
             {"action": "call", "amount": self.agree_amount(players)},
