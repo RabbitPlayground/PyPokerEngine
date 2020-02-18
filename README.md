@@ -20,7 +20,7 @@ This tutorial leads you to start point of poker AI development!!
 Before start AI development, we need to install *PyPokerEngine*.  
 You can use pip like this.
 ```
-pip install PyPokerEngine
+pip install git+git://github.com/YanickSchraner/PyPokerEngine
 ```
 This library supports Python 2 (2.7) and Python3 (3.5).
 
