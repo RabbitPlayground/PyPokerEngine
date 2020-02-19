@@ -1,4 +1,4 @@
-Make PyPokerEngie use deuces's card, deck and evaluator and increase performance
+Make PyPokerEngie use [deuces's](https://github.com/worldveil/deuces) card, deck and evaluator and increase performance
 
 
 # PyPokerEngine
