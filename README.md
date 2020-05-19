@@ -1,4 +1,4 @@
-Make PyPokerEngie use deuces's card, deck and evaluator and increase performance
+Make PyPokerEngie use [deuces's](https://github.com/worldveil/deuces) card, deck and evaluator and increase performance
 
 
 # PyPokerEngine
@@ -20,7 +20,7 @@ This tutorial leads you to start point of poker AI development!!
 Before start AI development, we need to install *PyPokerEngine*.  
 You can use pip like this.
 ```
-pip install PyPokerEngine
+pip install git+git://github.com/YanickSchraner/PyPokerEngine
 ```
 This library supports Python 2 (2.7) and Python3 (3.5).
 
@@ -125,49 +125,6 @@ We also provide GUI application. You can play poker with your AI on browser.
 Please check [PyPokerGUI](https://github.com/ishikota/PyPokerGUI).
 
 <img src="https://github.com/ishikota/PyPokerGUI/blob/master/screenshot/poker_demo.gif" width=500 />
-
-# for Reinforcement Learning users
-`PyPokerEngine` is developed for Reinforcement Learning usecase.  
-So we also provide `Emulator` class which has convinient methods for Reinforcement Learning.  
-Common usage of `Emulator` would be like below.  
-
-```python
-from pypokerengine.players import BasePokerPlayer
-from pypokerengine.api.emulator import Emulator
-from pypokerengine.utils.game_state_utils import restore_game_state
-
-from mymodule.poker_ai.player_model import SomePlayerModel
-
-class RLPLayer(BasePokerPlayer):
-
-    # Setup Emulator object by registering game information
-    def receive_game_start_message(self, game_info):
-        player_num = game_info["player_num"]
-        max_round = game_info["rule"]["max_round"]
-        small_blind_amount = game_info["rule"]["small_blind_amount"]
-        ante_amount = game_info["rule"]["ante"]
-        blind_structure = game_info["rule"]["blind_structure"]
-        
-        self.emulator = Emulator()
-        self.emulator.set_game_rule(player_num, max_round, small_blind_amount, ante_amount)
-        self.emulator.set_blind_structure(blind_structure)
-        
-        # Register algorithm of each player which used in the simulation.
-        for player_info in game_info["seats"]["players"]:
-            self.emulator.register_player(player_info["uuid"], SomePlayerModel())
-
-    def declare_action(self, valid_actions, hole_card, round_state):
-        game_state = restore_game_state(round_state)
-        # decide action by using some simulation result
-        # updated_state, events = self.emulator.apply_action(game_state, "fold")
-        # updated_state, events = self.emulator.run_until_round_finish(game_state)
-        # updated_state, events = self.emulator.run_until_game_finish(game_state)
-        if self.is_good_simulation_result(updated_state):
-            return # you would declare CALL or RAISE action
-        else:
-            return "fold", 0
-    
-```
 
 # Documentation
 For mode detail, please checkout [doc site](https://ishikota.github.io/PyPokerEngine/)
