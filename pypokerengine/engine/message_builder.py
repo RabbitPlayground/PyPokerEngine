@@ -68,6 +68,8 @@ class MessageBuilder:
 
     @classmethod
     def build_round_result_message(self, round_count, winners, hand_info, state):
+        winner_uuid = [winner.uuid for winner in winners]
+        hand_info = [info for info in hand_info if info['uuid'] in winner_uuid]
         message = {
             "message_type": self.ROUND_RESULT_MESSAGE,
             "round_count": round_count,
