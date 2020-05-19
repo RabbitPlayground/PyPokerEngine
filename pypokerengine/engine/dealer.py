@@ -194,6 +194,7 @@ class Dealer:
         self.game_history[f'round_{round_count}'] = round_msg
 
     def __write_game_history_to_file(self):
+        self.game_history['settings'] = {'initial_stack': self.initial_stack}
         with open(self.log_file_location, 'w+') as logfile:
             logfile.write(json.dumps(self.game_history))
 
