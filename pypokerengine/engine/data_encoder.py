@@ -20,7 +20,7 @@ class DataEncoder:
             "cashgame_stack": player.cashgame_stack,
             "state": self.__payinfo_to_str(player.pay_info.status)
         }
-        if holecard:
+        if holecard and player.pay_info.status in [PayInfo.ALLIN, PayInfo.PAY_TILL_END]:
             hole_hash = {"hole_card": [Card.int_to_str(card) for card in player.hole_card]}
             hash_.update(hole_hash)
         return hash_
