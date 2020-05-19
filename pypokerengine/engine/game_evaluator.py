@@ -25,7 +25,7 @@ class GameEvaluator:
         pots = self.create_pot(players)
         for pot in pots:
             winners = self.__find_winners_from(community_card, pot["eligibles"])
-            prize = int(pot["amount"] / len(winners))
+            prize = float(pot["amount"] / len(winners))
             for winner in winners:
                 prize_map[players.index(winner)] += prize
         return prize_map
