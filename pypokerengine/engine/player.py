@@ -87,7 +87,7 @@ class Player:
     def serialize(self):
         hole = [card for card in self.hole_card]
         return [
-            self.name, self.uuid, self.stack, hole, \
+            self.name, self.uuid, self.stack, hole,
             self.action_histories[::], self.pay_info.serialize(), self.round_action_histories[::], self.cashgame_stack
         ]
 
@@ -95,7 +95,8 @@ class Player:
     def deserialize(self, serial):
         hole = [cid for cid in serial[3]]
         player = self(serial[1], serial[2], serial[0])
-        if len(hole) != 0: player.add_holecard(hole)
+        if len(hole) != 0:
+            player.add_holecard(hole)
         player.action_histories = serial[4]
         player.pay_info = PayInfo.deserialize(serial[5])
         player.round_action_histories = serial[6]

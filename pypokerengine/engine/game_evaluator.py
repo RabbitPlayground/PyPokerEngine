@@ -32,13 +32,17 @@ class GameEvaluator:
 
     @classmethod
     def __create_prize_map(self, player_num):
-        def update(d, other): d.update(other); return d
+        def update(d, other):
+            d.update(other)
+
+        return d
 
         return reduce(update, [{i: 0} for i in range(player_num)], {})
 
     @classmethod
     def __find_winners_from(self, community_card, players):
-        score_player = lambda player: HandEvaluator.eval_hand(player.hole_card, community_card)
+        def score_player(player):
+            return HandEvaluator.eval_hand(player.hole_card, community_card)
 
         active_players = [player for player in players if player.is_active()]
         scores = [score_player(player) for player in active_players]
@@ -50,8 +54,10 @@ class GameEvaluator:
     @classmethod
     def __gen_hand_info_if_needed(self, players, community):
         active_players = [player for player in players if player.is_active()]
-        gen_hand_info = lambda player: {"uuid": player.uuid,
-                                        "hand": HandEvaluator.gen_hand_rank_info(player.hole_card, community)}
+
+        def gen_hand_info(player):
+            return {"uuid": player.uuid, "hand": HandEvaluator.gen_hand_rank_info(player.hole_card, community)}
+
         return [] if len(active_players) == 1 else [gen_hand_info(player) for player in active_players]
 
     @classmethod
@@ -69,8 +75,10 @@ class GameEvaluator:
     @classmethod
     def __get_side_pots(self, players):
         pay_amounts = [payinfo.amount for payinfo in self.__fetch_allin_payinfo(players)]
-        gen_sidepots = lambda sidepots, allin_amount: sidepots + [
-            self.__create_sidepot(players, sidepots, allin_amount)]
+
+        def gen_sidepots(sidepots, allin_amount):
+            return sidepots + [self.__create_sidepot(players, sidepots, allin_amount)]
+
         return reduce(gen_sidepots, pay_amounts, [])
 
     @classmethod
@@ -82,7 +90,9 @@ class GameEvaluator:
 
     @classmethod
     def __calc_sidepot_size(self, players, smaller_side_pots, allin_amount):
-        add_chip_for_pot = lambda pot, player: pot + min(allin_amount, player.pay_info.amount)
+        def add_chip_for_pot(pot, player):
+            return pot + min(allin_amount, player.pay_info.amount)
+
         target_pot_size = reduce(add_chip_for_pot, players, 0)
         return target_pot_size - self.__get_sidepots_sum(smaller_side_pots)
 
@@ -96,8 +106,7 @@ class GameEvaluator:
 
     @classmethod
     def __is_eligible(self, player, allin_amount):
-        return player.pay_info.amount >= allin_amount and \
-               player.pay_info.status != PayInfo.FOLDED
+        return player.pay_info.amount >= allin_amount and player.pay_info.status != PayInfo.FOLDED
 
     @classmethod
     def __fetch_allin_payinfo(self, players):

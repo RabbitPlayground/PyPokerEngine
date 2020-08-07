@@ -8,10 +8,10 @@ class Evaluator(object):
     Evaluates hand strengths using a variant of Cactus Kev's algorithm:
     http://suffe.cool/poker/evaluator.html
 
-    I make considerable optimizations in terms of speed and memory usage, 
-    in fact the lookup table generation can be done in under a second and 
-    consequent evaluations are very fast. Won't beat C, but very fast as 
-    all calculations are done with bit arithmetic and table lookups. 
+    I make considerable optimizations in terms of speed and memory usage,
+    in fact the lookup table generation can be done in under a second and
+    consequent evaluations are very fast. Won't beat C, but very fast as
+    all calculations are done with bit arithmetic and table lookups.
     """
 
     def __init__(self):
@@ -26,9 +26,9 @@ class Evaluator(object):
 
     def evaluate(self, cards, board):
         """
-        This is the function that the user calls to get a hand rank. 
+        This is the function that the user calls to get a hand rank.
 
-        Supports empty board, etc very flexible. No input validation 
+        Supports empty board, etc very flexible. No input validation
         because that's cycles!
         """
         all_cards = cards + board
@@ -40,7 +40,7 @@ class Evaluator(object):
         a rank in the range [1, 7462], with lower ranks being more powerful.
 
         Variant of Cactus Kev's 5 card evaluator, though I saved a lot of memory
-        space using a hash table and condensing some of the calculations. 
+        space using a hash table and condensing some of the calculations.
         """
         # if flush
         if cards[0] & cards[1] & cards[2] & cards[3] & cards[4] & 0xF000:
@@ -56,7 +56,7 @@ class Evaluator(object):
     def _six(self, cards):
         """
         Performs five_card_eval() on all (6 choose 5) = 6 subsets
-        of 5 cards in the set of 6 to determine the best ranking, 
+        of 5 cards in the set of 6 to determine the best ranking,
         and returns this ranking.
         """
         minimum = LookupTable.MAX_HIGH_CARD
@@ -73,7 +73,7 @@ class Evaluator(object):
     def _seven(self, cards):
         """
         Performs five_card_eval() on all (7 choose 5) = 21 subsets
-        of 5 cards in the set of 7 to determine the best ranking, 
+        of 5 cards in the set of 7 to determine the best ranking,
         and returns this ranking.
         """
         minimum = LookupTable.MAX_HIGH_CARD
@@ -90,7 +90,7 @@ class Evaluator(object):
     def get_rank_class(self, hr):
         """
         Returns the class of hand given the hand hand_rank
-        returned from evaluate. 
+        returned from evaluate.
         """
         if hr >= 0 and hr <= LookupTable.MAX_STRAIGHT_FLUSH:
             return LookupTable.MAX_TO_RANK_CLASS[LookupTable.MAX_STRAIGHT_FLUSH]
@@ -127,9 +127,9 @@ class Evaluator(object):
 
     def hand_summary(self, board, hands):
         """
-        Gives a sumamry of the hand with ranks as time proceeds. 
+        Gives a sumamry of the hand with ranks as time proceeds.
 
-        Requires that the board is in chronological order for the 
+        Requires that the board is in chronological order for the
         analysis to make sense.
         """
 

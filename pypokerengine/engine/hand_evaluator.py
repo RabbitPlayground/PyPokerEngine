@@ -85,14 +85,22 @@ class HandEvaluator:
     @classmethod
     def __calc_hand_info_flg(self, hole, community):
         cards = hole + community
-        if self.__is_straightflush(cards): return self.STRAIGHTFLUSH | self.__eval_straightflush(cards)
-        if self.__is_fourcard(cards): return self.FOURCARD | self.__eval_fourcard(cards)
-        if self.__is_fullhouse(cards): return self.FULLHOUSE | self.__eval_fullhouse(cards)
-        if self.__is_flush(cards): return self.FLUSH | self.__eval_flush(cards)
-        if self.__is_straight(cards): return self.STRAIGHT | self.__eval_straight(cards)
-        if self.__is_threecard(cards): return self.THREECARD | self.__eval_threecard(cards)
-        if self.__is_twopair(cards): return self.TWOPAIR | self.__eval_twopair(cards)
-        if self.__is_onepair(cards): return self.ONEPAIR | (self.__eval_onepair(cards))
+        if self.__is_straightflush(cards):
+            return self.STRAIGHTFLUSH | self.__eval_straightflush(cards)
+        if self.__is_fourcard(cards):
+            return self.FOURCARD | self.__eval_fourcard(cards)
+        if self.__is_fullhouse(cards):
+            return self.FULLHOUSE | self.__eval_fullhouse(cards)
+        if self.__is_flush(cards):
+            return self.FLUSH | self.__eval_flush(cards)
+        if self.__is_straight(cards):
+            return self.STRAIGHT | self.__eval_straight(cards)
+        if self.__is_threecard(cards):
+            return self.THREECARD | self.__eval_threecard(cards)
+        if self.__is_twopair(cards):
+            return self.TWOPAIR | self.__eval_twopair(cards)
+        if self.__is_onepair(cards):
+            return self.ONEPAIR | (self.__eval_onepair(cards))
         return self.__eval_holecard(hole)
 
     @classmethod
@@ -110,7 +118,8 @@ class HandEvaluator:
         memo = 0  # bit memo
         for card in cards:
             mask = 1 << card.rank
-            if memo & mask != 0: rank = max(rank, card.rank)
+            if memo & mask != 0:
+                rank = max(rank, card.rank)
             memo |= mask
         return rank << 4
 
@@ -129,7 +138,8 @@ class HandEvaluator:
         memo = 0
         for card in cards:
             mask = 1 << card.rank
-            if memo & mask != 0: ranks.append(card.rank)
+            if memo & mask != 0:
+                ranks.append(card.rank)
             memo |= mask
         return sorted(ranks)[::-1][:2]
 
@@ -148,7 +158,8 @@ class HandEvaluator:
         for r in range(2, 15):
             bit_memo >>= 3
             count = bit_memo & 7
-            if count >= 3: rank = r
+            if count >= 3:
+                rank = r
         return rank
 
     @classmethod
@@ -164,9 +175,13 @@ class HandEvaluator:
         bit_memo = reduce(lambda memo, card: memo | 1 << card.rank, cards, 0)
         bit_memo = bit_memo | 2 << (1 << 13 & 1)
         rank = -1
-        straight_check = lambda acc, i: acc & (bit_memo >> (r + i) & 1) == 1
+
+        def straight_check(acc, i):
+            return acc & (bit_memo >> (r + i) & 1) == 1
+
         for r in range(1, 11):
-            if reduce(straight_check, range(5), True): rank = r + 4
+            if reduce(straight_check, range(5), True):
+                rank = r + 4
         return rank
 
     @classmethod
@@ -180,8 +195,13 @@ class HandEvaluator:
     @classmethod
     def __search_flush(self, cards):
         best_suit_rank = -1
-        fetch_suit = lambda card: card.suit
-        fetch_rank = lambda card: card.rank
+
+        def fetch_suit(card):
+            return card.suit
+
+        def fetch_rank(card):
+            return card.rank
+
         for suit, group_obj in groupby(sorted(cards, key=fetch_suit), key=fetch_suit):
             g = list(group_obj)
             if len(g) >= 5:
@@ -201,7 +221,9 @@ class HandEvaluator:
 
     @classmethod
     def __search_fullhouse(self, cards):
-        fetch_rank = lambda card: card.rank
+        def fetch_rank(card):
+            return card.rank
+
         three_card_ranks, two_pair_ranks = [], []
         for rank, group_obj in groupby(sorted(cards, key=fetch_rank), key=fetch_rank):
             g = list(group_obj)
@@ -209,10 +231,13 @@ class HandEvaluator:
                 three_card_ranks.append(rank)
             if len(g) >= 2:
                 two_pair_ranks.append(rank)
-        two_pair_ranks = [rank for rank in two_pair_ranks if not rank in three_card_ranks]
+        two_pair_ranks = [rank for rank in two_pair_ranks if rank in not three_card_ranks]
         if len(three_card_ranks) == 2:
             two_pair_ranks.append(min(three_card_ranks))
-        max_ = lambda l: None if len(l) == 0 else max(l)
+
+        def max_(l):
+            return None if len(l) == 0 else max(l)
+
         return max_(three_card_ranks), max_(two_pair_ranks)
 
     @classmethod
@@ -226,7 +251,9 @@ class HandEvaluator:
 
     @classmethod
     def __search_fourcard(self, cards):
-        fetch_rank = lambda card: card.rank
+        def fetch_rank(card):
+            return card.rank
+
         for rank, group_obj in groupby(sorted(cards, key=fetch_rank), key=fetch_rank):
             g = list(group_obj)
             if len(g) >= 4:
@@ -244,10 +271,14 @@ class HandEvaluator:
     @classmethod
     def __search_straightflush(self, cards):
         flush_cards = []
-        fetch_suit = lambda card: card.suit
+
+        def fetch_suit(card):
+            return card.suit
+
         for suit, group_obj in groupby(sorted(cards, key=fetch_suit), key=fetch_suit):
             g = list(group_obj)
-            if len(g) >= 5: flush_cards = g
+            if len(g) >= 5:
+                flush_cards = g
         return self.__search_straight(flush_cards)
 
     @classmethod

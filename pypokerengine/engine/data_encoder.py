@@ -26,7 +26,7 @@ class DataEncoder:
         return hash_
 
     @classmethod
-    def encode_seats(self, seats, hole_cards = False):
+    def encode_seats(self, seats, hole_cards=False):
         return {
             "seats": [self.encode_player(player, holecard=hole_cards) for player in seats.players]
         }
@@ -35,8 +35,10 @@ class DataEncoder:
     def encode_pot(self, players):
         pots = GameEvaluator.create_pot(players)
         main = {"amount": pots[0]["amount"]}
-        gen_hsh = lambda sidepot: \
-            {"amount": sidepot["amount"], "eligibles": [p.uuid for p in sidepot["eligibles"]]}
+
+        def gen_hsh(sidepot):
+            return {"amount": sidepot["amount"], "eligibles": [p.uuid for p in sidepot["eligibles"]]}
+
         side = [gen_hsh(sidepot) for sidepot in pots[1:]]
         return {"main": main, "side": side}
 
@@ -97,7 +99,7 @@ class DataEncoder:
         return {"winners": self.__encode_players(winners)}
 
     @classmethod
-    def encode_round_state(self, state, hole_cards = False):
+    def encode_round_state(self, state, hole_cards=False):
         hsh = {
             "street": self.__street_to_str(state["street"]),
             "pot": self.encode_pot(state["table"].seats.players),
@@ -147,7 +149,7 @@ class DataEncoder:
         max_len = max([len(h) for h in all_player_histories])
         unified_histories = [self.__unify_length(max_len, l) for l in all_player_histories]
         ordered_histories = reduce(lambda acc, zp: acc + list(zp), zip(*unified_histories), [])
-        return [history for history in ordered_histories if not history is None]
+        return [history for history in ordered_histories if history is not None]
 
     @classmethod
     def __unify_length(self, max_len, lst):

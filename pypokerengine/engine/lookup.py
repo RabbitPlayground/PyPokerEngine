@@ -6,11 +6,11 @@ class LookupTable(object):
     """
     Number of Distinct Hand Values:
 
-    Straight Flush   10 
+    Straight Flush   10
     Four of a Kind   156      [(13 choose 2) * (2 choose 1)]
     Full Houses      156      [(13 choose 2) * (2 choose 1)]
     Flush            1277     [(13 choose 5) - 10 straight flushes]
-    Straight         10 
+    Straight         10
     Three of a Kind  858      [(13 choose 3) * (3 choose 1)]
     Two Pair         858      [(13 choose 3) * (3 choose 2)]
     One Pair         2860     [(13 choose 4) * (4 choose 1)]
@@ -75,7 +75,7 @@ class LookupTable(object):
 
     def flushes(self):
         """
-        Straight flushes and flushes. 
+        Straight flushes and flushes.
 
         Lookup is done on 13 bit integer (2^13 > 7462):
         xxxbbbbb bbbbbbbb => integer hand index
@@ -110,7 +110,7 @@ class LookupTable(object):
             # straight flush, do not add it
             notSF = True
             for sf in straight_flushes:
-                # if f XOR sf == 0, then bit pattern 
+                # if f XOR sf == 0, then bit pattern
                 # is same, and we should not add
                 if not f ^ sf:
                     notSF = False
@@ -142,12 +142,12 @@ class LookupTable(object):
 
         # we can reuse these bit sequences for straights
         # and high cards since they are inherently related
-        # and differ only by context 
+        # and differ only by context
         self.straight_and_highcards(straight_flushes, flushes)
 
     def straight_and_highcards(self, straights, highcards):
         """
-        Unique five card sets. Straights and highcards. 
+        Unique five card sets. Straights and highcards.
 
         Reuses bit sequences from flush calculations.
         """
@@ -241,8 +241,7 @@ class LookupTable(object):
 
             for kickers in kgen:
                 k1, k2, k3 = kickers
-                product = Card.PRIMES[pairrank] ** 2 * Card.PRIMES[k1] \
-                          * Card.PRIMES[k2] * Card.PRIMES[k3]
+                product = Card.PRIMES[pairrank] ** 2 * Card.PRIMES[k1] * Card.PRIMES[k2] * Card.PRIMES[k3]
                 self.unsuited_lookup[product] = rank
                 rank += 1
 
@@ -259,7 +258,7 @@ class LookupTable(object):
         Bit hack from here:
         http://www-graphics.stanford.edu/~seander/bithacks.html#NextBitPermutation
 
-        Generator even does this in poker order rank 
+        Generator even does this in poker order rank
         so no need to sort when done! Perfect.
         """
         t = int((bits | (bits - 1))) + 1

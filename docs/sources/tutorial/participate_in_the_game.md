@@ -1,8 +1,10 @@
 # Play poker with AI
+
 The simple way to evaluate AI strength is **playing poker with AI**.  
 In this tutorial, we will create `ConsolePlayer` to participate in the game via console.  
 
 ## Create ConsolePlayer
+
 we create `ConsolePlayer` in the same way as [creating our first AI](../index.md).  
 (Override `BasePokerPlayer` class and implement abstracted methods)
 
@@ -15,7 +17,7 @@ So the implementation would be like this.
 (This code does not handle errors for simplicity.
 You can check complete code from [here](https://github.com/ishikota/PyPokerEngine/blob/master/examples/players/console_player.py))
 
-```
+```python
 import pypokerengine.utils.visualize_utils as U
 
 class ConsolePlayer(BasePokerPlayer):
@@ -59,6 +61,7 @@ class ConsolePlayer(BasePokerPlayer):
 ```
 
 ## Beat Our First AI by Our Own Hands
+
 Now we are ready to play the game. Let's try to beat our first AI `FishPlayer`!!  
 
 ```python
@@ -104,7 +107,7 @@ Enter some key to continue ...
 
 Good! We have Ace in hole card ! Let's ALLIN !!
 
-```
+```python
 -- Declare your action (UUID = qrnewmfzuyacjscxpfftgy) --
 ======================================================================
 -- valid actions --
@@ -131,7 +134,8 @@ Enter raise amount >> 100
 ```
 
 FishPlayer declares CALL action as we expected !
-```
+
+```python
 -- Game update (UUID = qrnewmfzuyacjscxpfftgy) --
 ======================================================================
 -- new action --
@@ -156,7 +160,7 @@ Enter some key to continue ...
 
 Round result is ...
 
-```
+```python
 -- Round result (UUID = qrnewmfzuyacjscxpfftgy) --
 ======================================================================
 -- winners --

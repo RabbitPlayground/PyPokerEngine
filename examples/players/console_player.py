@@ -68,6 +68,6 @@ class ConsolePlayer(BasePokerPlayer):
             else:
                 print("Invalid raise amount %d. Try again.")
                 return self.__receive_raise_amount_from_console(min_amount, max_amount)
-        except:
+        except Exception as ex:
             print("Invalid input received. Try again.")
             return self.__receive_raise_amount_from_console(min_amount, max_amount)

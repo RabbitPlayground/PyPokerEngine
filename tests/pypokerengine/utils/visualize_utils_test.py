@@ -7,6 +7,7 @@ from tests.base_unittest import BaseUnitTest
 
 import pypokerengine.utils.visualize_utils as U
 
+
 class VisualizeUtilsTest(BaseUnitTest):
 
     def setUp(self):
@@ -72,18 +73,18 @@ game_info = {
     'rule': {
         'ante': 5,
         'blind_structure': {
-            5 : { "ante": 10, "small_blind": 20 },
-            7 : { "ante": 15, "small_blind": 30 }
+            5: {"ante": 10, "small_blind": 20},
+            7: {"ante": 15, "small_blind": 30}
         },
         'max_round': 10,
         'initial_stack': 100,
         'small_blind_amount': 10
-      },
-      'seats': [
-          {'stack': 100, 'state': 'participating', 'name': 'p1', 'uuid': 'ftwdqkystzsqwjrzvludgi'},
-          {'stack': 100, 'state': 'participating', 'name': 'p2', 'uuid': 'bbiuvgalrglojvmgggydyt'},
-          {'stack': 100, 'state': 'participating', 'name': 'p3', 'uuid': 'zkbpehnazembrxrihzxnmt'}
-      ]
+    },
+    'seats': [
+        {'stack': 100, 'state': 'participating', 'name': 'p1', 'uuid': 'ftwdqkystzsqwjrzvludgi'},
+        {'stack': 100, 'state': 'participating', 'name': 'p2', 'uuid': 'bbiuvgalrglojvmgggydyt'},
+        {'stack': 100, 'state': 'participating', 'name': 'p3', 'uuid': 'zkbpehnazembrxrihzxnmt'}
+    ]
 }
 
 seats = [

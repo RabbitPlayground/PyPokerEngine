@@ -56,7 +56,7 @@ def visualize_declare_action(valid_actions, hole_card, round_state, uuid=None):
     ls.append(_visualize_item("%s: %s" % (
         valid_actions[2]["action"],
         [valid_actions[2]["amount"]["min"], valid_actions[2]["amount"]["max"]])
-                              ))
+    ))
     ls.append(_visualize_sub_title("hole card"))
     ls.append(_visualize_item(str(hole_card)))
     ls.append(_visualize_sub_title("round state"))
@@ -131,7 +131,10 @@ def visualize_round_state(rs):
         player_str = player_str.replace("NEXT", "CURRENT")
         ls.append(_visualize_sub_item("%d : %s" % (idx, player_str)))
     ls.append(_visualize_item("action histories"))
-    sort_key = lambda e: {"preflop": 0, "flop": 1, "turn": 2, "river": 3}[e[0]]
+
+    def sort_key(e):
+        return {"preflop": 0, "flop": 1, "turn": 2, "river": 3}[e[0]]
+
     for street, histories in sorted(rs["action_histories"].items(), key=sort_key):
         if len(histories) != 0:
             ls.append(_visualize_sub_item(street))
@@ -154,15 +157,17 @@ def visualize_player_with_badge(player, rs):
 
 
 def _is_next_player(player, rs):
-    return rs and not isinstance(rs["next_player"], str) \
-           and player == rs["seats"][rs["next_player"]]
+    return rs and not isinstance(rs["next_player"], str) and player == rs["seats"][rs["next_player"]]
 
 
 def _gen_badge(is_sb, is_bb, is_next):
     badges = []
-    if is_sb: badges.append("SB")
-    if is_bb: badges.append("BB")
-    if is_next: badges.append("NEXT")
+    if is_sb:
+        badges.append("SB")
+    if is_bb:
+        badges.append("BB")
+    if is_next:
+        badges.append("NEXT")
     badge_str = ""
     if len(badges) != 0:
         badge_str = ", ".join(badges)

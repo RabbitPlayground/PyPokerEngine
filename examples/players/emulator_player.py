@@ -8,7 +8,8 @@ DEBUG_MODE = True
 
 
 def log(msg):
-    if DEBUG_MODE: print("[debug_info] --> %s" % msg)
+    if DEBUG_MODE:
+        print("[debug_info] --> %s" % msg)
 
 
 class EmulatorPlayer(BasePokerPlayer):
@@ -42,8 +43,7 @@ class EmulatorPlayer(BasePokerPlayer):
             for i in range(NB_SIMULATION):
                 game_state = self._setup_game_state(round_state, hole_card)
                 round_finished_state, _events = self.emulator.run_until_round_finish(game_state)
-                my_stack = \
-                [player for player in round_finished_state['table'].seats.players if player.uuid == self.uuid][0].stack
+                my_stack = [player for player in round_finished_state['table'].seats.players if player.uuid == self.uuid][0].stack
                 simulation_results.append(my_stack)
             action_results[action] = 1.0 * sum(simulation_results) / NB_SIMULATION
             log("average stack after simulation when declares %s : %s" % (

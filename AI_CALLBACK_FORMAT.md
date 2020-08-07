@@ -1,5 +1,7 @@
 # SAMPLE OF CALLBACK ARGUMENTS
+
 `BasePokerPlayer` class requires you to implement following 6 methods.
+
 - `declare_action(self, valid_actions, hole_card, round_state)`
 - `receive_game_start_message(self, game_info)`
 - `receive_round_start_message(self, round_count, hole_card, seats)`
@@ -9,21 +11,27 @@
 
 In this document, we show actual argument of each callback method sampled from real game.
 
-#### `declare_action(self, valid_actions, hole_card, round_state)`
+## `declare_action(self, valid_actions, hole_card, round_state)`
+
 - valid_actions
-```
+
+```python
 [
   {'action': 'fold', 'amount': 0},
   {'action': 'call', 'amount': 0},
   {'action': 'raise', 'amount': {'max': 95, 'min': 20}}
 ]
 ```
+
 - hole_card
-```
+
+```python
 ['CA', 'DK']
 ```
+
 - round_state
-```
+
+```python
 {
   'round_count': 2,
   'dealer_btn': 1,
@@ -65,9 +73,11 @@ In this document, we show actual argument of each callback method sampled from r
 }
 ```
 
-#### `receive_game_start_message(self, game_info)`
+## `receive_game_start_message(self, game_info)`
+
 - game_info
-```
+
+```python
 {
   'player_num': 3,
   'rule': {
@@ -88,17 +98,23 @@ In this document, we show actual argument of each callback method sampled from r
 }
 ```
 
-#### `receive_round_start_message(self, round_count, hole_card, seats):`
+## `receive_round_start_message(self, round_count, hole_card, seats):`
+
 - round_count
-```
+
+```python
 2
 ```
+
 - hole_card
-```
+
+```python
 ['C2', 'HQ']
 ```
+
 - seats
-```
+
+```python
 [
   {'stack': 135, 'state': 'participating', 'name': 'p1', 'uuid': 'ftwdqkystzsqwjrzvludgi'},
   {'stack': 80, 'state': 'participating', 'name': 'p2', 'uuid': 'bbiuvgalrglojvmgggydyt'},
@@ -106,13 +122,17 @@ In this document, we show actual argument of each callback method sampled from r
 ]
 ```
 
-#### `receive_street_start_message(self, street, round_state)`
+## `receive_street_start_message(self, street, round_state)`
+
 - street
-```
+
+```python
 'preflop'
 ```
+
 - round_state
-```
+
+```python
 {
   'round_count': 1,
   'dealer_btn': 0,
@@ -140,17 +160,21 @@ In this document, we show actual argument of each callback method sampled from r
 }
 ```
 
-#### `receive_game_update_message(self, new_action, round_state)`
+## `receive_game_update_message(self, new_action, round_state)`
+
 - new_action
-```
+
+```python
 {
   'player_uuid': 'ftwdqkystzsqwjrzvludgi',
   'action': 'raise',
   'amount': 30
 }
 ```
+
 - round_state
-```
+
+```python
 {
   'round_count': 2,
   'dealer_btn': 1,
@@ -186,15 +210,19 @@ In this document, we show actual argument of each callback method sampled from r
 }
 ```
 
-#### `receive_round_result_message(self, winners, hand_info, round_state)`
+## `receive_round_result_message(self, winners, hand_info, round_state)`
+
 - winners
-```
+
+```python
 [
   {'stack': 300, 'state': 'participating', 'name': 'p1', 'uuid': 'ftwdqkystzsqwjrzvludgi'}
 ]
 ```
+
 - hand_info
-```
+
+```python
 [
   {
     'uuid': 'ftwdqkystzsqwjrzvludgi',
@@ -219,8 +247,10 @@ In this document, we show actual argument of each callback method sampled from r
   }
 ]
 ```
+
 - round_state
-```
+
+```python
 {
   'dealer_btn': 1,
   'big_blind_pos': 0,
@@ -269,4 +299,3 @@ In this document, we show actual argument of each callback method sampled from r
   }
 }
 ```
-

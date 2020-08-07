@@ -1,4 +1,5 @@
 # Getting fine-grained control of the game
+
 You can run the game and get game result like this.
 
 ```python
@@ -16,7 +17,9 @@ In this tutorial, we will create `EmulatorPlayer` to understand how to use `Emul
 (`EmulatorPlayer` would not be practical AI but good example to learn about `Emulator`)
 
 ## How to use Emulator
+
 ### Register game settings on Emulator
+
 First we need to setup `Emulator` object with game settings like number of player.
 
 ```python
@@ -27,6 +30,7 @@ emulator.set_game_rule(nb_player=2, max_round=10, sb_amount=5, ante_amount=0)
 ```
 
 ### Register player's model on Emulator
+
 To simulate the game, we need to create **model of player**.  
 *model of player* defines how player behaves in the game.  
 
@@ -74,8 +78,7 @@ You can setup `game_state` object from `round_state` object like this.
 (You receive `round_state` object in callback method of `BasePokerPlayer` like `declare_action`.)
 
 ```python
-from pypokerengine.utils.game_state_utils import\
-        restore_game_state, attach_hole_card, attach_hole_card_from_deck
+from pypokerengine.utils.game_state_utils import restore_game_state, attach_hole_card, attach_hole_card_from_deck
 
 def setup_game_state(round_state, my_hole_card):
     game_state = restore_game_state(round_state)
@@ -97,16 +100,16 @@ So we need to restore that information on `game_state` object.
 Ok, everything is ready. Now you can progress or stop the game as you want by these methods.
 
 - `emulator.apply_action(game_state, action, bet_amount)`
-    - Use this method if you want to progress the game step-by-step.
+  - Use this method if you want to progress the game step-by-step.
 - `emulator.run_until_round_finish(game_state)`
-    - Use this method if you want to progress the game round-by-round.
+  - Use this method if you want to progress the game round-by-round.
 - `emulator.run_until_game_finish(game_state)`
-    - Use this method if you want to see the final result of the simulation.
+  - Use this method if you want to see the final result of the simulation.
 
 Each method returns updated game state and events objects.  
 (events object contains information of what happend during simulation like "player1 declared call", "street is updated to FLOP")  
 
-```
+```python
 >>> emulator.set_game_rule(nb_player, max_round=10, sb_amount=5, ante_amount=0)
 >>> next_turn_state, events = emulator.apply_action(current_state, 'call', 10)
 >>> round_finish_state, events = emulator.run_until_round_finish(current_state)
@@ -126,6 +129,7 @@ For more detail about `Emulator` or game_state, events objects,
 please checkout [Emulator documentation](../documentation/about_emulator.md).
 
 ## Create EmulatorPlayer
+
 To sum up this tutorial, we will create sample AI `EmulatorPlayer` which uses `Emulator` to make a decision.  
 
 To get accurate simulation result, fine-tuned player modeling is necessary.  
@@ -157,9 +161,6 @@ for try_action in try_actions:
 # best_action <- choose action which gets highest action_score
 return best_action
 ```
-
-We don't explaing implementation detail here.  
-Please check out complete implementation of `EmulatorPlayer` from [here]().
 
 Let's match the `EmulatorPlayer` against our first AI `FishPlayer`.
 

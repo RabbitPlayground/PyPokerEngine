@@ -15,11 +15,13 @@ class Table:
         self._blind_pos = [sb_pos, bb_pos]
 
     def sb_pos(self):
-        if self._blind_pos is None: raise Exception("blind position is not yet set")
+        if self._blind_pos is None:
+            raise Exception("blind position is not yet set")
         return self._blind_pos[0]
 
     def bb_pos(self):
-        if self._blind_pos is None: raise Exception("blind position is not yet set")
+        if self._blind_pos is None:
+            raise Exception("blind position is not yet set")
         return self._blind_pos[1]
 
     def get_community_card(self):

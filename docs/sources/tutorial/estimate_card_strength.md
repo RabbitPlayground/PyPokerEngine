@@ -1,4 +1,5 @@
 # How to Estimate Hand Strength
+
 The hand strength is key factor to make a decision in poker.  
 If our hole card is ['H4', 'D7'] and community cards are ['D3', 'C5', 'C6'],
 we would take agreessive action.
@@ -9,7 +10,9 @@ One simple way is *running lots of simulations and use average win rate as estim
 In this tutorial, we will create `HonestPlayer` which declares CALL only if his hand is good.
 
 ## Estimate Hand Strength by simulation
+
 The code to estimates win rate of hands in three players game would be like this.
+
 ```python
 nb_simulation = 1000
 nb_player = 3
@@ -44,6 +47,7 @@ Let's use it !!
 ```
 
 ## Create HonestPlayer
+
 Ok. Let's start `HonestPlayer` development.  
 The behavior of `HonestPlayer` is very simple (because he is honest).
 
@@ -51,6 +55,7 @@ The behavior of `HonestPlayer` is very simple (because he is honest).
 2. declare FOLD othrewise
 
 The code would be...
+
 ```python
 from pypokerengine.players import BasePokerPlayer
 from pypokerengine.utils.card_utils import gen_cards, estimate_hole_card_win_rate
