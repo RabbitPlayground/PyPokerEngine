@@ -45,7 +45,8 @@ class Dealer:
             table.shift_dealer_btn()
             if cashgame:
                 table = self.__reset_stack_for_cashgame(table)
-        self.__write_game_history_to_file()
+        if self.log_file_location is not '':
+            self.__write_game_history_to_file()
         return self.__generate_game_result(max_round, table.seats)
 
     def play_round(self, round_count, blind_amount, ante, table):
