@@ -6,15 +6,21 @@ def setup_config(max_round, initial_stack, small_blind_amount, ante=0):
     return Config(max_round, initial_stack, small_blind_amount, ante)
 
 
-def start_poker(config, verbose=2, cashgame: bool = False, log_file_location: str = ''):
+def start_poker(config, verbose=2, cheat=False, cst_deck_ids=[], return_last_two=False, return_deepbot_rank=False):
     config.validation()
-    dealer = Dealer(config.sb_amount, config.initial_stack, config.ante, log_file_location)
+    dealer = Dealer(config.sb_amount, config.initial_stack, config.ante, cheat=cheat, cst_deck_ids=cst_deck_ids)
     dealer.set_verbose(verbose)
     dealer.set_blind_structure(config.blind_structure)
     for info in config.players_info:
         dealer.register_player(info["name"], info["algorithm"])
-    result_message = dealer.start_game(config.max_round, cashgame=cashgame)
-    return _format_result(result_message)
+    result_message, last_two, deepbot_rank = dealer.start_game(config.max_round)
+    if not(return_last_two):
+        return _format_result(result_message)
+    else:
+        if not(return_deepbot_rank):
+            return _format_result(result_message), last_two
+        else:
+            return _format_result(result_message), last_two, deepbot_rank
 
 
 def _format_result(result_message):

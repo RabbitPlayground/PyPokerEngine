@@ -1,14 +1,15 @@
+from pypokerengine.engine.card import Card
 from pypokerengine.engine.seats import Seats
 from pypokerengine.engine.deck import Deck
 
 
 class Table:
 
-    def __init__(self, cheat_deck=None):
+    def __init__(self, cheat_deck=None, cheat=False, cst_deck_ids=[]):
         self.dealer_btn = 0
         self._blind_pos = None
         self.seats = Seats()
-        self.deck = cheat_deck if cheat_deck else Deck()
+        self.deck = cheat_deck if cheat_deck else Deck(cheat=cheat, cst_deck_ids=cst_deck_ids)
         self._community_card = []
 
     def set_blind_pos(self, sb_pos, bb_pos):
@@ -50,7 +51,7 @@ class Table:
         return self.__find_entitled_player_pos(start_pos, lambda player: player.is_waiting_ask())
 
     def serialize(self):
-        community_card = [card for card in self._community_card]
+        community_card = [card.to_id() for card in self._community_card]
         return [
             self.dealer_btn, Seats.serialize(self.seats),
             Deck.serialize(self.deck), community_card, self._blind_pos
@@ -59,7 +60,7 @@ class Table:
     @classmethod
     def deserialize(self, serial):
         deck = Deck.deserialize(serial[2])
-        community_card = [cid for cid in serial[3]]
+        community_card = [Card.from_id(cid) for cid in serial[3]]
         table = self(cheat_deck=deck)
         table.dealer_btn = serial[0]
         table.seats = Seats.deserialize(serial[1])
@@ -71,7 +72,7 @@ class Table:
         players = self.seats.players
         search_targets = players + players
         search_targets = search_targets[start_pos + 1:start_pos + len(players) + 1]
-        assert (len(search_targets) == len(players))
+        assert(len(search_targets) == len(players))
         match_player = next((player for player in search_targets if check_method(player)), -1)
         return self._player_not_found if match_player == -1 else players.index(match_player)
 
