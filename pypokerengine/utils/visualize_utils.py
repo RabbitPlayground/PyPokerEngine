@@ -1,5 +1,4 @@
-DIVIDER = "=" * 70
-
+DIVIDER = "="*70
 
 def visualize_game_start(game_info, uuid=None):
     ls = []
@@ -16,11 +15,10 @@ def visualize_game_start(game_info, uuid=None):
         for round_count in game_info["rule"]["blind_structure"]:
             level_info = game_info["rule"]["blind_structure"][round_count]
             ante, sb_amount = level_info["ante"], level_info["small_blind"]
-            ls.append(_visualize_sub_item("after %d round : ante = %s, sb_amount = %s" % (
+            ls.append(_visualize_sub_item("after %d round : ante = %s, sb_amount = %s" %(
                 round_count, ante, sb_amount)))
     ls.append(DIVIDER)
     return "\n".join(ls)
-
 
 def visualize_round_start(round_count, hole_card, seats, uuid=None):
     ls = []
@@ -35,7 +33,6 @@ def visualize_round_start(round_count, hole_card, seats, uuid=None):
     ls.append(DIVIDER)
     return "\n".join(ls)
 
-
 def visualize_street_start(street, _round_state, uuid=None):
     ls = []
     ls.append(_visualize_title("New street start", uuid))
@@ -44,7 +41,6 @@ def visualize_street_start(street, _round_state, uuid=None):
     ls.append(_visualize_item(street))
     ls.append(DIVIDER)
     return "\n".join(ls)
-
 
 def visualize_declare_action(valid_actions, hole_card, round_state, uuid=None):
     ls = []
@@ -64,7 +60,6 @@ def visualize_declare_action(valid_actions, hole_card, round_state, uuid=None):
     ls.append(DIVIDER)
     return "\n".join(ls)
 
-
 def visualize_game_update(new_action, round_state, uuid=None):
     ls = []
     ls.append(_visualize_title("Game update", uuid))
@@ -80,12 +75,10 @@ def visualize_game_update(new_action, round_state, uuid=None):
     ls.append(DIVIDER)
     return "\n".join(ls)
 
-
 def _fetch_player_name(uuid, rs):
     if uuid not in [p["uuid"] for p in rs["seats"]]:
-        raise Exception("player of uuid = [ %s ] not found in round state => %s" % (uuid, rs))
-    return [p["name"] for p in rs["seats"] if p["uuid"] == uuid][0]
-
+        raise Exception("player of uuid = [ %s ] not found in round state => %s" %(uuid, rs))
+    return [p["name"] for p in rs["seats"] if p["uuid"]==uuid][0]
 
 def visualize_round_result(winners, hand_info, round_state, uuid=None):
     ls = []
@@ -103,20 +96,20 @@ def visualize_round_result(winners, hand_info, round_state, uuid=None):
     ls.append(DIVIDER)
     return "\n".join(ls)
 
-
 def visualize_hand_info(info, round_state):
     ls = []
     uuid = info["uuid"]
     name = _fetch_player_name(uuid, round_state)
     hand, hole = info["hand"]["hand"], info["hand"]["hole"]
-    ls.append(_visualize_item("%s (%s): hand => %s (%s)" % (name, uuid, hand["strength"], str(hole["cards"]))))
+    ls.append(_visualize_item("%s (%s)" % (name, uuid)))
+    ls.append(_visualize_sub_item("hand => %s (high=%d, low=%d)" % (
+        hand["strength"], hand["high"], hand["low"])))
+    ls.append(_visualize_sub_item("hole => [%s, %s]" % (hole["high"], hole["low"])))
     return "\n".join(ls)
-
 
 def visualize_player(player):
     return "%s (%s) => state : %s, stack : %s" % (
-        player["name"], player["uuid"], player["state"], player["stack"])
-
+            player["name"], player["uuid"], player["state"], player["stack"])
 
 def visualize_round_state(rs):
     ls = []
@@ -131,20 +124,16 @@ def visualize_round_state(rs):
         player_str = player_str.replace("NEXT", "CURRENT")
         ls.append(_visualize_sub_item("%d : %s" % (idx, player_str)))
     ls.append(_visualize_item("action histories"))
-
-    def sort_key(e):
-        return {"preflop": 0, "flop": 1, "turn": 2, "river": 3}[e[0]]
-
+    sort_key = lambda e: {"preflop":0, "flop":1, "turn":2, "river":3}[e[0]]
     for street, histories in sorted(rs["action_histories"].items(), key=sort_key):
         if len(histories) != 0:
             ls.append(_visualize_sub_item(street))
             for history in histories:
-                summary = {k: v for k, v in history.items()}
+                summary = {k:v for k,v in history.items()}
                 uuid = summary.pop("uuid")
                 summary["player"] = "%s (uuid=%s)" % (_fetch_player_name(uuid, rs), uuid)
                 ls.append(_visualize_sub_sub_item(str(summary)))
     return "\n".join(ls)
-
 
 def visualize_player_with_badge(player, rs):
     p_pos = rs["seats"].index(player)
@@ -155,42 +144,34 @@ def visualize_player_with_badge(player, rs):
     player_str += _gen_badge(is_sb, is_bb, is_next)
     return player_str
 
-
 def _is_next_player(player, rs):
-    return rs and not isinstance(rs["next_player"], str) and player == rs["seats"][rs["next_player"]]
-
+    return rs and not isinstance(rs["next_player"], str)\
+            and player == rs["seats"][rs["next_player"]]
 
 def _gen_badge(is_sb, is_bb, is_next):
     badges = []
-    if is_sb:
-        badges.append("SB")
-    if is_bb:
-        badges.append("BB")
-    if is_next:
-        badges.append("NEXT")
+    if is_sb: badges.append("SB")
+    if is_bb: badges.append("BB")
+    if is_next: badges.append("NEXT")
     badge_str = ""
     if len(badges) != 0:
         badge_str = ", ".join(badges)
         badge_str = " <= %s" % badge_str
     return badge_str
 
-
 def _visualize_title(title, uuid):
     additional_info = " (UUID = %s)" % uuid if uuid else ""
     return "-- %s%s --" % (title, additional_info)
 
-
 def _visualize_sub_title(subtitle):
     return "-- %s --" % subtitle
-
 
 def _visualize_item(item):
     return "  - %s" % item
 
-
 def _visualize_sub_item(subitem):
     return "    - %s" % subitem
 
-
 def _visualize_sub_sub_item(subsubitem):
     return "      - %s" % subsubitem
+

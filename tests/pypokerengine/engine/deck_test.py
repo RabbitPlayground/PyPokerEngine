@@ -10,12 +10,12 @@ class DeckTest(BaseUnitTest):
 
     def test_draw_card(self):
         card = self.deck.draw_card()
-        self.eq("SK", str(card))
+        self.eq("As", str(card))
         self.eq(51, self.deck.size())
 
     def test_draw_cards(self):
         cards = self.deck.draw_cards(3)
-        self.eq("SJ", str(cards[2]))
+        self.eq("Qs", str(cards[2]))
         self.eq(49, self.deck.size())
 
     def test_restore(self):

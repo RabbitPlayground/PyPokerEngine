@@ -9,21 +9,21 @@ class HandEvaluator:
     TWOPAIR = 1 << 9
     THREECARD = 1 << 10
     STRAIGHT = 1 << 11
-    FLASH = 1 << 12
+    FLUSH = 1 << 12
     FULLHOUSE = 1 << 13
     FOURCARD = 1 << 14
-    STRAIGHTFLASH = 1 << 15
+    STRAIGHTFLUSH = 1 << 15
 
     HAND_STRENGTH_MAP = {
-        HIGHCARD: "HIGHCARD",
-        ONEPAIR: "ONEPAIR",
-        TWOPAIR: "TWOPAIR",
-        THREECARD: "THREECARD",
-        STRAIGHT: "STRAIGHT",
-        FLASH: "FLASH",
-        FULLHOUSE: "FULLHOUSE",
-        FOURCARD: "FOURCARD",
-        STRAIGHTFLASH: "STRAIGHTFLASH"
+        HIGHCARD: 'HIGHCARD',
+        ONEPAIR: 'ONEPAIR',
+        TWOPAIR: 'TWOPAIR',
+        THREECARD: 'THREECARD',
+        STRAIGHT: 'STRAIGHT',
+        FLUSH: 'FLUSH',
+        FULLHOUSE: 'FULLHOUSE',
+        FOURCARD: 'FOURCARD',
+        STRAIGHTFLUSH: 'STRAIGHTFLUSH'
     }
 
     @classmethod
@@ -37,14 +37,14 @@ class HandEvaluator:
         hole_low = self.__mask_hole_low_rank(hand)
 
         return {
-            "hand": {
-                "strength": strength,
-                "high": hand_high,
-                "low": hand_low
+            'hand': {
+                'strength': strength,
+                'high': hand_high,
+                'low': hand_low
             },
-            "hole": {
-                "high": hole_high,
-                "low": hole_low
+            'hole': {
+                'high': hole_high,
+                'low': hole_low
             }
         }
 
@@ -63,21 +63,21 @@ class HandEvaluator:
     #       TwoPair of rank A, 4     =>       10 1110 0100
     #       ThreeCard of rank 9      =>      100 1001 0000
     #       Straight of rank 10      =>     1000 1010 0000
-    #       Flash of rank 5          =>    10000 0101 0000
+    #       Flush of rank 5          =>    10000 0101 0000
     #       FullHouse of rank 3, 4   =>   100000 0011 0100
     #       FourCard of rank 2       =>  1000000 0010 0000
-    #       straight flash of rank 7 => 10000000 0111 0000
+    #       straight flush of rank 7 => 10000000 0111 0000
     @classmethod
     def __calc_hand_info_flg(self, hole, community):
         cards = hole + community
-        if self.__is_straightflash(cards):
-            return self.STRAIGHTFLASH | self.__eval_straightflash(cards)
+        if self.__is_straightflush(cards):
+            return self.STRAIGHTFLUSH | self.__eval_straightflush(cards)
         if self.__is_fourcard(cards):
             return self.FOURCARD | self.__eval_fourcard(cards)
         if self.__is_fullhouse(cards):
             return self.FULLHOUSE | self.__eval_fullhouse(cards)
-        if self.__is_flash(cards):
-            return self.FLASH | self.__eval_flash(cards)
+        if self.__is_flush(cards):
+            return self.FLUSH | self.__eval_flush(cards)
         if self.__is_straight(cards):
             return self.STRAIGHT | self.__eval_straight(cards)
         if self.__is_threecard(cards):
@@ -158,27 +158,30 @@ class HandEvaluator:
     @classmethod
     def __search_straight(self, cards):
         bit_memo = reduce(lambda memo, card: memo | 1 << card.rank, cards, 0)
-        bit_memo = bit_memo | 2 << (1 << 13 & 1)
         rank = -1
 
         def straight_check(acc, i):
-            return acc & (bit_memo >> (r + i) & 1) == 1
+            return acc & (bit_memo >> i & 1) == 1
 
-        for r in range(1, 11):
-            if reduce(straight_check, range(5), True):
+        if reduce(straight_check, [1 + i for i in range(4)] + [13], True):
+            rank = 4
+
+        for r in range(1, 14):
+            if reduce(straight_check, [r + i for i in range(5)], True):
                 rank = r + 4
+
         return rank
 
     @classmethod
-    def __is_flash(self, cards):
-        return self.__search_flash(cards) != -1
+    def __is_flush(self, cards):
+        return self.__search_flush(cards) != -1
 
     @classmethod
-    def __eval_flash(self, cards):
-        return self.__search_flash(cards) << 4
+    def __eval_flush(self, cards):
+        return self.__search_flush(cards) << 4
 
     @classmethod
-    def __search_flash(self, cards):
+    def __search_flush(self, cards):
         best_suit_rank = -1
 
         def fetch_suit(card):
@@ -206,7 +209,6 @@ class HandEvaluator:
 
     @classmethod
     def __search_fullhouse(self, cards):
-
         def fetch_rank(card):
             return card.rank
 
@@ -247,16 +249,16 @@ class HandEvaluator:
         return 0
 
     @classmethod
-    def __is_straightflash(self, cards):
-        return self.__search_straightflash(cards) != -1
+    def __is_straightflush(self, cards):
+        return self.__search_straightflush(cards) != -1
 
     @classmethod
-    def __eval_straightflash(self, cards):
-        return self.__search_straightflash(cards) << 4
+    def __eval_straightflush(self, cards):
+        return self.__search_straightflush(cards) << 4
 
     @classmethod
-    def __search_straightflash(self, cards):
-        flash_cards = []
+    def __search_straightflush(self, cards):
+        flush_cards = []
 
         def fetch_suit(card):
             return card.suit
@@ -264,8 +266,8 @@ class HandEvaluator:
         for suit, group_obj in groupby(sorted(cards, key=fetch_suit), key=fetch_suit):
             g = list(group_obj)
             if len(g) >= 5:
-                flash_cards = g
-        return self.__search_straight(flash_cards)
+                flush_cards = g
+        return self.__search_straight(flush_cards)
 
     @classmethod
     def __mask_hand_strength(self, bit):
