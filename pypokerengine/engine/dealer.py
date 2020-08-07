@@ -1,6 +1,5 @@
 import random
 from collections import OrderedDict
-import json
 
 from pypokerengine.engine.poker_constants import PokerConstants as Const
 from pypokerengine.engine.table import Table
@@ -11,17 +10,17 @@ from pypokerengine.engine.message_builder import MessageBuilder
 
 class Dealer:
 
-    def __init__(self, small_blind_amount=None, initial_stack=None, ante=None, log_file_location: str = ''):
+    def __init__(self, small_blind_amount=None, initial_stack=None, ante=None, cheat=False, cst_deck_ids=[]):
         self.small_blind_amount = small_blind_amount
         self.ante = ante if ante else 0
         self.initial_stack = initial_stack
         self.uuid_list = self.__generate_uuid_list()
         self.message_handler = MessageHandler()
         self.message_summarizer = MessageSummarizer(verbose=0)
-        self.table = Table()
+        self.cheat = cheat
+        self.table = Table(cheat=self.cheat, cst_deck_ids=cst_deck_ids)
         self.blind_structure = {}
-        self.log_file_location = log_file_location
-        self.game_history = {}
+        self.play_count = 0
 
     def register_player(self, player_name, algorithm):
         self.__config_check()
@@ -32,22 +31,31 @@ class Dealer:
     def set_verbose(self, verbose):
         self.message_summarizer.verbose = verbose
 
-    def start_game(self, max_round, cashgame: bool = False):
+    def start_game(self, max_round):
         table = self.table
+        last_two = []
+        deepbot_rank = 0
         self.__notify_game_start(max_round)
         ante, sb_amount = self.ante, self.small_blind_amount
         for round_count in range(1, max_round + 1):
-            ante, sb_amount = self.__update_forced_bet_amount(ante, sb_amount, round_count, self.blind_structure)
             table = self.__exclude_short_of_money_players(table, ante, sb_amount)
-            if self.__is_game_finished(table) and not cashgame:
+            self.play_count += table.seats.count_active_players()
+            # save last two survivor names
+            if(table.seats.count_active_players()) == 2:
+                last_two = [player.name for player in table.seats.players if player.is_active()]
+            # check if deepbot lost
+            deepbot_activity = [player.is_active() for player in table.seats.players if player.name == 'deepbot']
+            if len(deepbot_activity) != 0:
+                if not(deepbot_activity[0]):
+                    deepbot_rank = len([player.name for player in table.seats.players if player.is_active()])
+                    break
+
+            ante, sb_amount = self.__update_forced_bet_amount(ante, sb_amount, round_count, self.blind_structure)
+            if self.__is_game_finished(table):
                 break
             table = self.play_round(round_count, sb_amount, ante, table)
             table.shift_dealer_btn()
-            if cashgame:
-                table = self.__reset_stack_for_cashgame(table)
-        if self.log_file_location is not '':
-            self.__write_game_history_to_file()
-        return self.__generate_game_result(max_round, table.seats)
+        return self.__generate_game_result(max_round, table.seats), last_two, deepbot_rank
 
     def play_round(self, round_count, blind_amount, ante, table):
         state, msgs = RoundManager.start_new_round(round_count, blind_amount, ante, table)
@@ -58,8 +66,6 @@ class Dealer:
                 state, msgs = RoundManager.apply_action(state, action, bet_amount)
             else:  # finish the round after publish round result
                 self.__publish_messages(msgs)
-                if self.log_file_location is not '':
-                    self.__write_round_log(round_count, msgs)
                 break
         return state["table"]
 
@@ -73,12 +79,17 @@ class Dealer:
         self.blind_structure = blind_structure
 
     def __update_forced_bet_amount(self, ante, sb_amount, round_count, blind_structure):
-        if round_count in blind_structure:
-            update_info = blind_structure[round_count]
-            msg = self.message_summarizer.summairze_blind_level_update(
-                round_count, ante, update_info["ante"], sb_amount, update_info["small_blind"])
-            self.message_summarizer.print_message(msg)
-            ante, sb_amount = update_info["ante"], update_info["small_blind"]
+        used_keys = []
+        for play_count_cap in blind_structure.keys():
+            if self.play_count >= play_count_cap:
+                update_info = blind_structure[play_count_cap]
+                used_keys.append(play_count_cap)
+                msg = self.message_summarizer.summairze_blind_level_update(
+                    round_count, ante, update_info["ante"], sb_amount, update_info["small_blind"])
+                # self.message_summarizer.print_message(msg)
+                ante, sb_amount = update_info["ante"], update_info["small_blind"]
+        for used_key in used_keys:
+            self.blind_structure.pop(used_key, None)
         return ante, sb_amount
 
     def __register_algorithm_to_message_handler(self, uuid, algorithm):
@@ -157,12 +168,6 @@ class Dealer:
         for player in no_money_players:
             player.pay_info.update_to_fold()
 
-    def __reset_stack_for_cashgame(self, table):
-        for player in table.seats.players:
-            player.cashgame_stack += player.stack - self.initial_stack
-            player.stack = self.initial_stack
-        return table
-
     def __generate_game_result(self, max_round, seats):
         config = self.__gen_config(max_round)
         result_message = MessageBuilder.build_game_result_message(config, seats)
@@ -180,29 +185,22 @@ class Dealer:
 
     def __config_check(self):
         if self.small_blind_amount is None:
-            raise Exception("small_blind_amount is not set!! You need to call 'dealer.set_small_blind_amount' before.")
+            raise Exception("small_blind_amount is not set!!\
+          You need to call 'dealer.set_small_blind_amount' before.")
         if self.initial_stack is None:
-            raise Exception("initial_stack is not set!! You need to call 'dealer.set_initial_stack' before.")
+            raise Exception("initial_stack is not set!!\
+          You need to call 'dealer.set_initial_stack' before.")
 
     def __fetch_uuid(self):
         return self.uuid_list.pop()
 
     def __generate_uuid_list(self):
-        return [self.__generate_uuid() for _ in range(100)]
+        return ['uuid-' + str(100 - i) for i in range(100)]
 
     def __generate_uuid(self):
         uuid_size = 22
         chars = [chr(code) for code in range(97, 123)]
         return "".join([random.choice(chars) for _ in range(uuid_size)])
-
-    def __write_round_log(self, round_count, msgs):
-        round_msg = msgs[-1][-1]['message']
-        self.game_history[f'round_{round_count}'] = round_msg
-
-    def __write_game_history_to_file(self):
-        self.game_history['settings'] = {'initial_stack': self.initial_stack}
-        with open(self.log_file_location, 'w+') as logfile:
-            logfile.write(json.dumps(self.game_history))
 
 
 class MessageHandler:

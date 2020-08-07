@@ -1,9 +1,10 @@
-from pypokerengine.engine.card import Card
 from pypokerengine.engine.pay_info import PayInfo
+from pypokerengine.engine.card import Card
 from pypokerengine.engine.poker_constants import PokerConstants as Const
 
 
 class Player:
+
     ACTION_FOLD_STR = "FOLD"
     ACTION_CALL_STR = "CALL"
     ACTION_RAISE_STR = "RAISE"
@@ -19,20 +20,17 @@ class Player:
         self.round_action_histories = self.__init_round_action_histories()
         self.action_histories = []
         self.pay_info = PayInfo()
-        self.cashgame_stack = 0
-        self.last_hole_card = []
 
     def add_holecard(self, cards):
         if len(self.hole_card) != 0:
             raise ValueError(self.__dup_hole_msg)
         if len(cards) != 2:
             raise ValueError(self.__wrong_num_hole_msg % (len(cards)))
-        if not all([isinstance(card, int) for card in cards]):
+        if not all([isinstance(card, Card) for card in cards]):
             raise ValueError(self.__wrong_type_hole_msg)
         self.hole_card = cards
 
     def clear_holecard(self):
-        self.last_hole_card = [Card.int_to_str(c) for c in self.hole_card]
         self.hole_card = []
 
     def append_chip(self, amount):
@@ -40,7 +38,8 @@ class Player:
 
     def collect_bet(self, amount):
         if self.stack < amount:
-            raise ValueError(self.__collect_err_msg % (amount, self.stack))
+            amount = self.stack
+            # raise ValueError(self.__collect_err_msg % (amount, self.stack))
         self.stack -= amount
 
     def is_active(self):
@@ -85,22 +84,21 @@ class Player:
         return last_pay_history["amount"] if last_pay_history else 0
 
     def serialize(self):
-        hole = [card for card in self.hole_card]
+        hole = [card.to_id() for card in self.hole_card]
         return [
             self.name, self.uuid, self.stack, hole,
-            self.action_histories[::], self.pay_info.serialize(), self.round_action_histories[::], self.cashgame_stack
+            self.action_histories[::], self.pay_info.serialize(), self.round_action_histories[::]
         ]
 
     @classmethod
     def deserialize(self, serial):
-        hole = [cid for cid in serial[3]]
+        hole = [Card.from_id(cid) for cid in serial[3]]
         player = self(serial[1], serial[2], serial[0])
         if len(hole) != 0:
             player.add_holecard(hole)
         player.action_histories = serial[4]
         player.pay_info = PayInfo.deserialize(serial[5])
         player.round_action_histories = serial[6]
-        player.cashgame_stack = serial[7]
         return player
 
     """ private """
@@ -132,7 +130,7 @@ class Player:
         }
 
     def __blind_history(self, small_blind, sb_amount):
-        assert (sb_amount is not None)
+        assert(sb_amount is not None)
         action = self.ACTION_SMALL_BLIND if small_blind else self.ACTION_BIG_BLIND
         amount = sb_amount if small_blind else sb_amount * 2
         add_amount = sb_amount
@@ -143,7 +141,7 @@ class Player:
         }
 
     def __ante_history(self, pay_amount):
-        assert (pay_amount > 0)
+        assert(pay_amount > 0)
         return {
             "action": self.ACTION_ANTE,
             "amount": pay_amount
