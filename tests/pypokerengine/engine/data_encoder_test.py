@@ -46,7 +46,8 @@ class DataEncoderTest(BaseUnitTest):
         self.eq(['uuid1', 'uuid3'], side_pot2['eligibles'])
 
     def test_encofe_game_information(self):
-        config = {"initial_stack": 100, "max_round": 10, "small_blind_amount": 5, "ante": 1, "blind_structure": {1: {"ante": 3, "small_blind": 10}}}
+        config = {"initial_stack": 100, "max_round": 10, "small_blind_amount": 5,
+                  "ante": 1, "blind_structure": {1: {"ante": 3, "small_blind": 10}}}
         seats = setup_seats()
         hsh = DataEncoder.encode_game_information(config, seats)
         self.eq(3, hsh["player_num"])
@@ -117,7 +118,7 @@ class DataEncoderTest(BaseUnitTest):
         self.eq("flop", hsh["street"])
         self.eq(DataEncoder.encode_pot(state["table"].seats.players), hsh["pot"])
         self.eq(DataEncoder.encode_seats(state["table"].seats)["seats"], hsh["seats"])
-        self.eq(["CA"], hsh["community_card"])
+        self.eq(["2d"], hsh["community_card"])
         self.eq(state["table"].dealer_btn, hsh["dealer_btn"])
         self.eq(state["next_player"], hsh["next_player"])
         self.eq(1, hsh["small_blind_pos"])

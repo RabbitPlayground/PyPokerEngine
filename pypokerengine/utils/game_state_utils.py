@@ -96,8 +96,8 @@ def _restore_community_card_on_table(table, card_data):
 def _restore_deck(str_exclude_cards):
     deck = Deck()
     exclude_ids = [Card.to_id(Card.from_str(s)) for s in str_exclude_cards]
-    deck_cards = [Card.from_id(cid) for cid in Deck.GetFullDeck() if cid not in exclude_ids]
-    deck.cards = deck_cards
+    deck_cards = [Card.from_id(cid) for cid in range(1, 53) if cid not in exclude_ids]
+    deck.deck = deck_cards
     return deck
 
 

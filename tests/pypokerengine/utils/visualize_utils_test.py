@@ -19,51 +19,51 @@ class VisualizeUtilsTest(BaseUnitTest):
 
     def test_visualize_game_start(self):
         s = U.visualize_game_start(game_info)
-        self.assertIn("3 players game", s)
-        self.assertIn("10 round", s)
-        self.assertIn("start stack = 100", s)
-        self.assertIn("ante = 5", s)
-        self.assertIn("small blind = 10", s)
-        self.assertIn("after 5 round", s)
+        self.assertIn('3 players game', s)
+        self.assertIn('10 round', s)
+        self.assertIn('start stack = 100', s)
+        self.assertIn('ante = 5', s)
+        self.assertIn('small blind = 10', s)
+        self.assertIn('after 5 round', s)
 
     def test_visualize_round_start(self):
-        s = U.visualize_round_start(2, ['C2', 'HQ'], seats)
-        self.assertIn("Round 2 start", s)
-        self.assertIn("C2", s)
-        self.assertIn("HQ", s)
-        self.assertIn("players information", s)
+        s = U.visualize_round_start(2, ['2c', 'Qh'], seats)
+        self.assertIn('Round 2 start', s)
+        self.assertIn('2c', s)
+        self.assertIn('Qh', s)
+        self.assertIn('players information', s)
 
     def test_visualize_street_start(self):
-        s = U.visualize_street_start("preflop", "dummy")
-        self.assertIn("preflop", s)
+        s = U.visualize_street_start('preflop', 'dummy')
+        self.assertIn('preflop', s)
 
     def test_visualize_declare_action(self):
-        s = U.visualize_declare_action(valid_actions, ['CA', 'DK'], round_state)
-        self.assertIn("fold", s)
-        self.assertIn("call: 0", s)
-        self.assertIn("raise: [20, 95]", s)
-        self.assertIn("CA", s)
-        self.assertIn("DK", s)
-        self.assertIn("round state", s)
+        s = U.visualize_declare_action(valid_actions, ['Ac', 'Kd'], round_state)
+        self.assertIn('fold', s)
+        self.assertIn('call: 0', s)
+        self.assertIn('raise: [20, 95]', s)
+        self.assertIn('Ac', s)
+        self.assertIn('Kd', s)
+        self.assertIn('round state', s)
 
     def test_visualize_game_update(self):
         s = U.visualize_game_update(new_action, round_state)
-        self.assertIn("p1", s)
-        self.assertIn("ftwdqkystzsqwjrzvludgi", s)
-        self.assertIn("raise: 30", s)
+        self.assertIn('p1', s)
+        self.assertIn('ftwdqkystzsqwjrzvludgi', s)
+        self.assertIn('raise: 30', s)
 
     def test_visualize_round_result(self):
         s = U.visualize_round_result(winners, hand_info, round_state)
-        self.assertIn("winners", s)
-        self.assertIn("hand info", s)
-        self.assertIn("round state", s)
+        self.assertIn('winners', s)
+        self.assertIn('hand info', s)
+        self.assertIn('round state', s)
 
     def test_additonal_info(self):
-        uuid = "hoge"
+        uuid = 'hoge'
         self.assertIn(uuid, U.visualize_game_start(game_info, uuid))
-        self.assertIn(uuid, U.visualize_round_start(2, ['C2', 'HQ'], seats, uuid))
-        self.assertIn(uuid, U.visualize_street_start("preflop", "dummy", uuid))
-        self.assertIn(uuid, U.visualize_declare_action(valid_actions, ['CA', 'DK'], round_state, uuid))
+        self.assertIn(uuid, U.visualize_round_start(2, ['2c', 'Qh'], seats, uuid))
+        self.assertIn(uuid, U.visualize_street_start('preflop', 'dummy', uuid))
+        self.assertIn(uuid, U.visualize_declare_action(valid_actions, ['Ac', 'Kd'], round_state, uuid))
         self.assertIn(uuid, U.visualize_game_update(new_action, round_state, uuid))
         self.assertIn(uuid, U.visualize_round_result(winners, hand_info, round_state, uuid))
 
@@ -73,8 +73,8 @@ game_info = {
     'rule': {
         'ante': 5,
         'blind_structure': {
-            5: {"ante": 10, "small_blind": 20},
-            7: {"ante": 15, "small_blind": 30}
+            5: {'ante': 10, 'small_blind': 20},
+            7: {'ante': 15, 'small_blind': 30}
         },
         'max_round': 10,
         'initial_stack': 100,
@@ -107,7 +107,7 @@ round_state = {
     'next_player': 0,
     'small_blind_amount': 10,
     'street': 'turn',
-    'community_card': ['DJ', 'H6', 'S6', 'H5'],
+    'community_card': ['Jd', '6h', '6s', '5h'],
     'seats': [
         {'stack': 95, 'state': 'participating', 'name': 'p1', 'uuid': 'ftwdqkystzsqwjrzvludgi'},
         {'stack': 20, 'state': 'participating', 'name': 'p2', 'uuid': 'bbiuvgalrglojvmgggydyt'},

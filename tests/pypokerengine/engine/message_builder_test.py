@@ -27,7 +27,7 @@ class MessageBuilderTest(BaseUnitTest):
         self.eq(MessageBuilder.ROUND_START_MESSAGE, msg["message_type"])
         self.eq(7, msg["round_count"])
         self.eq(DataEncoder.encode_seats(seats)["seats"], msg["seats"])
-        self.eq(["CA", "C2"], msg["hole_card"])
+        self.eq(["2d", "3d"], msg["hole_card"])
 
     def test_street_start_message(self):
         state = self.__setup_state()
@@ -45,7 +45,7 @@ class MessageBuilderTest(BaseUnitTest):
         msg = message["message"]
         self.eq("ask", message["type"])
         self.eq(MessageBuilder.ASK_MESSAGE, msg["message_type"])
-        self.eq(["CA", "C2"], msg["hole_card"])
+        self.eq(["2d", "3d"], msg["hole_card"])
         self.eq(3, len(msg["valid_actions"]))
         self.eq(DataEncoder.encode_round_state(state), msg["round_state"])
         self.eq(DataEncoder.encode_action_histories(table), msg["action_histories"])
@@ -102,7 +102,8 @@ class MessageBuilderTest(BaseUnitTest):
         return table
 
     def __setup_config(self):
-        return {"initial_stack": 100, "max_round": 10, "small_blind_amount": 5, "ante": 3, "blind_structure": {}}
+        return {"initial_stack": 100, "max_round": 10, "small_blind_amount": 5,
+                "ante": 3, "blind_structure": {}}
 
     def __setup_seats(self):
         seats = Seats()

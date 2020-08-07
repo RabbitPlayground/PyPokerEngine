@@ -3,6 +3,7 @@ from pypokerengine.engine.action_checker import ActionChecker
 
 
 class MessageBuilder:
+
     GAME_START_MESSAGE = "game_start_message"
     ROUND_START_MESSAGE = "round_start_message"
     STREET_START_MESSAGE = "street_start_message"
@@ -68,13 +69,11 @@ class MessageBuilder:
 
     @classmethod
     def build_round_result_message(self, round_count, winners, hand_info, state):
-        winner_uuid = [winner.uuid for winner in winners]
-        hand_info = [info for info in hand_info if info['uuid'] in winner_uuid]
         message = {
             "message_type": self.ROUND_RESULT_MESSAGE,
             "round_count": round_count,
             "hand_info": hand_info,
-            "round_state": DataEncoder.encode_round_state(state, True)
+            "round_state": DataEncoder.encode_round_state(state)
         }
         message.update(DataEncoder.encode_winners(winners))
         return self.__build_notification_message(message)
