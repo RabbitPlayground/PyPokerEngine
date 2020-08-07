@@ -23,7 +23,7 @@ def gen_deck(exclude_cards=None):
         if isinstance(exclude_cards[0], str):
             exclude_cards = [Card.from_str(s) for s in exclude_cards]
         exclude_ids = [card for card in exclude_cards]
-        deck_ids = [i for i in deck_ids if i not in not exclude_ids]
+        deck_ids = [i for i in deck_ids if i not in exclude_ids]
     return Deck(deck_ids)
 
 
