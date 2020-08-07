@@ -53,11 +53,9 @@ class ActionChecker:
         if action == 'fold':
             return False
         elif action == 'call':
-            return self.__is_short_of_money(players[player_pos], amount) \
-                   or self.__is_illegal_call(players, amount)
+            return self.__is_short_of_money(players[player_pos], amount) or self.__is_illegal_call(players, amount)
         elif action == 'raise':
-            return self.__is_short_of_money(players[player_pos], amount) \
-                   or self.__is_illegal_raise(players, amount, sb_amount)
+            return self.__is_short_of_money(players[player_pos], amount) or self.__is_illegal_raise(players, amount, sb_amount)
 
     @classmethod
     def __is_illegal_call(self, players, amount):

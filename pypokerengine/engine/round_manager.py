@@ -44,7 +44,8 @@ class RoundManager:
 
     @classmethod
     def __correct_ante(self, ante_amount, players):
-        if ante_amount == 0: return
+        if ante_amount == 0:
+            return
         active_players = [player for player in players if player.is_active()]
         for player in active_players:
             player.collect_bet(ante_amount)
@@ -126,15 +127,18 @@ class RoundManager:
     @classmethod
     def __round_start_message(self, round_count, table):
         players = table.seats.players
-        gen_msg = lambda idx: (
-        players[idx].uuid, MessageBuilder.build_round_start_message(round_count, idx, table.seats))
+
+        def gen_msg(idx):
+            return (players[idx].uuid, MessageBuilder.build_round_start_message(round_count, idx, table.seats))
+
         return reduce(lambda acc, idx: acc + [gen_msg(idx)], range(len(players)), [])
 
     @classmethod
     def __forward_street(self, state):
         table = state["table"]
         street_start_msg = [(-1, MessageBuilder.build_street_start_message(state))]
-        if table.seats.count_active_players() == 1: street_start_msg = []
+        if table.seats.count_active_players() == 1:
+            street_start_msg = []
         if table.seats.count_ask_wait_players() <= 1:
             state["street"] += 1
             state, messages = self.__start_street(state)
@@ -148,7 +152,7 @@ class RoundManager:
     @classmethod
     def __update_state_by_action(self, state, action, bet_amount):
         table = state["table"]
-        action, bet_amount = ActionChecker.correct_action( \
+        action, bet_amount = ActionChecker.correct_action(
             table.seats.players, state["next_player"], state["small_blind_amount"], action, bet_amount)
         next_player = table.seats.players[state["next_player"]]
         if ActionChecker.is_allin(next_player, action, bet_amount):
@@ -192,8 +196,7 @@ class RoundManager:
         max_pay = max([p.paid_sum() for p in players])
         everyone_agreed = len(players) == len([p for p in players if self.__is_agreed(max_pay, p)])
         lonely_player = state["table"].seats.count_active_players() == 1
-        no_need_to_ask = state["table"].seats.count_ask_wait_players() == 1 and \
-                         next_player and next_player.is_waiting_ask() and next_player.paid_sum() == max_pay
+        no_need_to_ask = state["table"].seats.count_ask_wait_players() == 1 and next_player and next_player.is_waiting_ask() and next_player.paid_sum() == max_pay
         return everyone_agreed or lonely_player or no_need_to_ask
 
     @classmethod
@@ -204,12 +207,10 @@ class RoundManager:
     @classmethod
     def __is_agreed(self, max_pay, player):
         # BigBlind should be asked action at least once
-        is_preflop = player.round_action_histories[0] == None
-        bb_ask_once = len(player.action_histories) == 1 \
-                      and player.action_histories[0]["action"] == Player.ACTION_BIG_BLIND
+        is_preflop = player.round_action_histories[0] is None
+        bb_ask_once = len(player.action_histories) == 1 and player.action_histories[0]["action"] == Player.ACTION_BIG_BLIND
         bb_ask_check = not is_preflop or not bb_ask_once
-        return (bb_ask_check and player.paid_sum() == max_pay and len(player.action_histories) != 0) \
-               or player.pay_info.status in [PayInfo.FOLDED, PayInfo.ALLIN]
+        return (bb_ask_check and player.paid_sum() == max_pay and len(player.action_histories) != 0) or player.pay_info.status in [PayInfo.FOLDED, PayInfo.ALLIN]
 
     @classmethod
     def __gen_initial_state(self, round_count, small_blind_amount, table):

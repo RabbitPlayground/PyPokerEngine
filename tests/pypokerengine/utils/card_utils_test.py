@@ -5,6 +5,7 @@ from tests.base_unittest import BaseUnitTest
 from pypokerengine.engine.card import Card
 from pypokerengine.engine.deck import Deck
 
+
 class CardUtilsTest(BaseUnitTest):
 
     def test_gen_cards(self):
@@ -19,7 +20,7 @@ class CardUtilsTest(BaseUnitTest):
         mock_return = community + [Card.from_str("D7")]
         with patch('pypokerengine.utils.card_utils._fill_community_card', side_effect=[mock_return]):
             U._montecarlo_simulation(3, my_cards, community)
-            U._fill_community_card.assert_called_with(community, used_card=my_cards+community)
+            U._fill_community_card.assert_called_with(community, used_card=my_cards + community)
 
         mock_return = [U.gen_cards(a) for a in [["D7"], ["DK", "HK", "H8", "SA"]]]
         with patch('pypokerengine.utils.card_utils._pick_unused_card', side_effect=mock_return):
@@ -49,20 +50,20 @@ class CardUtilsTest(BaseUnitTest):
             Card(Card.CLUB, 10),
             Card(Card.DIAMOND, 5),
             Card(Card.DIAMOND, 6)
-            ]
+        ]
         hole = [
             Card(Card.CLUB, 9),
             Card(Card.DIAMOND, 2)
         ]
         expected = {
-                "hand":"HIGHCARD",
-                "strength": 37522
-                }
+            "hand": "HIGHCARD",
+            "strength": 37522
+        }
         self.eq(expected, U.evaluate_hand(hole, community))
+
 
 def Any(cls):
     class Any(cls):
         def __eq__(self, other):
             return True
     return Any()
-

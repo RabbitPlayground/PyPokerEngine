@@ -75,7 +75,7 @@ class Dealer:
     def __update_forced_bet_amount(self, ante, sb_amount, round_count, blind_structure):
         if round_count in blind_structure:
             update_info = blind_structure[round_count]
-            msg = self.message_summarizer.summairze_blind_level_update( \
+            msg = self.message_summarizer.summairze_blind_level_update(
                 round_count, ante, update_info["ante"], sb_amount, update_info["small_blind"])
             self.message_summarizer.print_message(msg)
             ante, sb_amount = update_info["ante"], update_info["small_blind"]
@@ -116,33 +116,40 @@ class Dealer:
         sb_pos, bb_pos = self.__steal_money_from_poor_player(table, ante, sb_amount)
         self.__disable_no_money_player(table.seats.players)
         table.set_blind_pos(sb_pos, bb_pos)
-        if table.seats.players[table.dealer_btn].stack == 0: table.shift_dealer_btn()
+        if table.seats.players[table.dealer_btn].stack == 0:
+            table.shift_dealer_btn()
         return table
 
     def __steal_money_from_poor_player(self, table, ante, sb_amount):
         players = table.seats.players
         # exclude player who cannot pay ante
-        for player in [p for p in players if p.stack < ante]: player.stack = 0
-        if players[table.dealer_btn].stack == 0: table.shift_dealer_btn()
+        for player in [p for p in players if p.stack < ante]:
+            player.stack = 0
+        if players[table.dealer_btn].stack == 0:
+            table.shift_dealer_btn()
 
         search_targets = players + players + players
         search_targets = search_targets[table.dealer_btn + 1:table.dealer_btn + 1 + len(players)]
         # exclude player who cannot pay small blind
         sb_player = self.__find_first_elligible_player(search_targets, sb_amount + ante)
         sb_relative_pos = search_targets.index(sb_player)
-        for player in search_targets[:sb_relative_pos]: player.stack = 0
+        for player in search_targets[:sb_relative_pos]:
+            player.stack = 0
         # exclude player who cannot pay big blind
         search_targets = search_targets[sb_relative_pos + 1:sb_relative_pos + len(players)]
         bb_player = self.__find_first_elligible_player(search_targets, sb_amount * 2 + ante, sb_player)
         if sb_player == bb_player:  # no one can pay big blind. So steal money from all players except small blind
-            for player in [p for p in players if p != bb_player]: player.stack = 0
+            for player in [p for p in players if p != bb_player]:
+                player.stack = 0
         else:
             bb_relative_pos = search_targets.index(bb_player)
-            for player in search_targets[:bb_relative_pos]: player.stack = 0
+            for player in search_targets[:bb_relative_pos]:
+                player.stack = 0
         return players.index(sb_player), players.index(bb_player)
 
     def __find_first_elligible_player(self, players, need_amount, default=None):
-        if default: return next((player for player in players if player.stack >= need_amount), default)
+        if default:
+            return next((player for player in players if player.stack >= need_amount), default)
         return next((player for player in players if player.stack >= need_amount))
 
     def __disable_no_money_player(self, players):
@@ -173,11 +180,9 @@ class Dealer:
 
     def __config_check(self):
         if self.small_blind_amount is None:
-            raise Exception("small_blind_amount is not set!!\
-          You need to call 'dealer.set_small_blind_amount' before.")
+            raise Exception("small_blind_amount is not set!! You need to call 'dealer.set_small_blind_amount' before.")
         if self.initial_stack is None:
-            raise Exception("initial_stack is not set!!\
-          You need to call 'dealer.set_initial_stack' before.")
+            raise Exception("initial_stack is not set!! You need to call 'dealer.set_initial_stack' before.")
 
     def __fetch_uuid(self):
         return self.uuid_list.pop()
@@ -236,15 +241,18 @@ class MessageSummarizer(object):
         print(message)
 
     def summarize_messages(self, raw_messages):
-        if self.verbose == 0: return
+        if self.verbose == 0:
+            return
 
         summaries = [self.summarize(raw_message[1]) for raw_message in raw_messages]
         summaries = [summary for summary in summaries if summary is not None]
         summaries = list(OrderedDict.fromkeys(summaries))
-        for summary in summaries: self.print_message(summary)
+        for summary in summaries:
+            self.print_message(summary)
 
     def summarize(self, message):
-        if self.verbose == 0: return None
+        if self.verbose == 0:
+            return None
 
         content = message["message"]
         message_type = content["message_type"]

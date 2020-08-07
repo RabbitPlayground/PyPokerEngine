@@ -10,7 +10,8 @@ def gen_cards(cards_str):
 
 
 def estimate_hole_card_win_rate(nb_simulation, nb_player, hole_card, community_card=None):
-    if not community_card: community_card = []
+    if not community_card:
+        community_card = []
     win_count = sum([_montecarlo_simulation(nb_player, hole_card, community_card) for _ in range(nb_simulation)])
     return 1.0 * win_count / nb_simulation
 
@@ -22,7 +23,7 @@ def gen_deck(exclude_cards=None):
         if isinstance(exclude_cards[0], str):
             exclude_cards = [Card.from_str(s) for s in exclude_cards]
         exclude_ids = [card for card in exclude_cards]
-        deck_ids = [i for i in deck_ids if not i in exclude_ids]
+        deck_ids = [i for i in deck_ids if i not in notexclude_ids]
     return Deck(deck_ids)
 
 

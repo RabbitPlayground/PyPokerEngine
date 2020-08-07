@@ -4,6 +4,7 @@ from nose.tools import raises
 from tests.base_unittest import BaseUnitTest
 from examples.players.fold_man import FoldMan
 
+
 class GameTest(BaseUnitTest):
 
     def test_start_poker(self):
@@ -32,7 +33,7 @@ class GameTest(BaseUnitTest):
         config = G.setup_config(1, 100, 10)
         config.register_player("p1", FoldMan())
         config.register_player("p2", FoldMan())
-        config.set_blind_structure({ 1: { "ante":5, "small_blind":10 } })
+        config.set_blind_structure({1: {"ante": 5, "small_blind": 10}})
         result = G.start_poker(config)
         p1, p2 = [result["players"][i] for i in range(2)]
         self.eq(115, p1["stack"])
@@ -55,4 +56,3 @@ class GameTest(BaseUnitTest):
     def test_register_player_when_invalid(self):
         config = G.setup_config(1, 100, 10)
         config.register_player("p1", "dummy")
-

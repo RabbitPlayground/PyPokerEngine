@@ -83,7 +83,7 @@ class Emulator(object):
             next_player_uuid = game_state["table"].seats.players[next_player_pos].uuid
             next_player_algorithm = self.fetch_player(next_player_uuid)
             msg = MessageBuilder.build_ask_message(next_player_pos, game_state)["message"]
-            action, amount = next_player_algorithm.declare_action( \
+            action, amount = next_player_algorithm.declare_action(
                 msg["valid_actions"], msg["hole_card"], msg["round_state"])
             game_state, messages = RoundManager.apply_action(game_state, action, amount)
             mailbox += messages
@@ -107,10 +107,12 @@ class Emulator(object):
                     player.stack = self.initial_stack
             game_state, events = self.start_new_round(game_state)
             event_box += events
-            if Event.GAME_FINISH == events[-1]["type"]: break
+            if Event.GAME_FINISH == events[-1]["type"]:
+                break
             game_state, events = self.run_until_round_finish(game_state)
             event_box += events
-            if Event.GAME_FINISH == events[-1]["type"]: break
+            if Event.GAME_FINISH == events[-1]["type"]:
+                break
         event_box = [e for e in event_box if e]
         return game_state, event_box
 
@@ -124,7 +126,8 @@ class Emulator(object):
         ante, sb_amount = update_blind_level(ante, sb_amount, round_count, self.blind_structure)
         deepcopy_table = exclude_short_of_money_players(deepcopy_table, ante, sb_amount)
         is_game_finished = len([1 for p in deepcopy_table.seats.players if p.is_active()]) == 1
-        if is_game_finished: return deepcopy, self._generate_game_result_event(deepcopy)
+        if is_game_finished:
+            return deepcopy, self._generate_game_result_event(deepcopy)
 
         new_state, messages = RoundManager.start_new_round(round_count, sb_amount, ante, deepcopy_table)
         events = [self.create_event(message[1]["message"]) for message in messages]
@@ -174,35 +177,42 @@ def exclude_short_of_money_players(table, ante, sb_amount):
     sb_pos, bb_pos = _steal_money_from_poor_player(table, ante, sb_amount)
     _disable_no_money_player(table.seats.players)
     table.set_blind_pos(sb_pos, bb_pos)
-    if table.seats.players[table.dealer_btn].stack == 0: table.shift_dealer_btn()
+    if table.seats.players[table.dealer_btn].stack == 0:
+        table.shift_dealer_btn()
     return table
 
 
 def _steal_money_from_poor_player(table, ante, sb_amount):
     players = table.seats.players
     # exclude player who cannot pay ante
-    for player in [p for p in players if p.stack < ante]: player.stack = 0
-    if players[table.dealer_btn].stack == 0: table.shift_dealer_btn()
+    for player in [p for p in players if p.stack < ante]:
+        player.stack = 0
+    if players[table.dealer_btn].stack == 0:
+        table.shift_dealer_btn()
 
     search_targets = players + players + players
     search_targets = search_targets[table.dealer_btn + 1:table.dealer_btn + 1 + len(players)]
     # exclude player who cannot pay small blind
     sb_player = _find_first_elligible_player(search_targets, sb_amount + ante)
     sb_relative_pos = search_targets.index(sb_player)
-    for player in search_targets[:sb_relative_pos]: player.stack = 0
+    for player in search_targets[:sb_relative_pos]:
+        player.stack = 0
     # exclude player who cannot pay big blind
     search_targets = search_targets[sb_relative_pos + 1:sb_relative_pos + len(players)]
     bb_player = _find_first_elligible_player(search_targets, sb_amount * 2 + ante, sb_player)
     if sb_player == bb_player:  # no one can pay big blind. So steal money from all players except small blind
-        for player in [p for p in players if p != bb_player]: player.stack = 0
+        for player in [p for p in players if p != bb_player]:
+            player.stack = 0
     else:
         bb_relative_pos = search_targets.index(bb_player)
-        for player in search_targets[:bb_relative_pos]: player.stack = 0
+        for player in search_targets[:bb_relative_pos]:
+            player.stack = 0
     return players.index(sb_player), players.index(bb_player)
 
 
 def _find_first_elligible_player(players, need_amount, default=None):
-    if default: return next((player for player in players if player.stack >= need_amount), default)
+    if default:
+        return next((player for player in players if player.stack >= need_amount), default)
     return next((player for player in players if player.stack >= need_amount))
 
 
@@ -240,7 +250,9 @@ class Event:
 
     @classmethod
     def create_round_finish_event(self, message):
-        player_info = lambda info: {"uuid": info["uuid"], "stack": info["stack"]}
+        def player_info(info):
+            return {"uuid": info["uuid"], "stack": info["stack"]}
+
         return {
             "type": self.ROUND_FINISH,
             "round_state": message["round_state"],
@@ -249,7 +261,9 @@ class Event:
 
     @classmethod
     def create_game_finish_event(self, message):
-        player_info = lambda info: {"uuid": info["uuid"], "stack": info["stack"]}
+        def player_info(info):
+            return {"uuid": info["uuid"], "stack": info["stack"]}
+
         return {
             "type": self.GAME_FINISH,
             "players": [player_info(info) for info in message["game_information"]["seats"]]

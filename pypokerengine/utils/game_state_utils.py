@@ -44,8 +44,10 @@ _street_community_card_num = {
 def attach_hole_card(game_state, uuid, hole_card):
     deepcopy = deepcopy_game_state(game_state)
     target = [player for player in deepcopy["table"].seats.players if uuid == player.uuid]
-    if len(target) == 0: raise Exception('The player whose uuid is "%s" is not found in passed game_state.' % uuid)
-    if len(target) != 1: raise Exception('Multiple players have uuid "%s". So we cannot attach hole card.' % uuid)
+    if len(target) == 0:
+        raise Exception('The player whose uuid is "%s" is not found in passed game_state.' % uuid)
+    if len(target) != 1:
+        raise Exception('Multiple players have uuid "%s". So we cannot attach hole card.' % uuid)
     target[0].hole_card = hole_card
     return deepcopy
 
@@ -118,7 +120,8 @@ def _restore_action_histories_on_players(players, round_action_histories):
     for street_name in past_street_names:
         street_flg = _street_flg_translator[street_name]
         action_histories = round_action_histories[street_name]
-        for player in players: player.round_action_histories[street_flg] = []
+        for player in players:
+            player.round_action_histories[street_flg] = []
         for action_history in action_histories:
             player = _find_user_by_uuid(players, action_history["uuid"])
             player.round_action_histories[street_flg].append(action_history)
@@ -148,12 +151,18 @@ def _find_user_by_uuid(players, uuid):
 
 def _fetch_pay_amount(action_history):
     action = action_history["action"]
-    if action == Player.ACTION_FOLD_STR: return 0
-    if action == Player.ACTION_CALL_STR: return action_history["paid"]
-    if action == Player.ACTION_RAISE_STR: return action_history["paid"]
-    if action == Player.ACTION_SMALL_BLIND: return action_history["amount"]
-    if action == Player.ACTION_BIG_BLIND: return action_history["amount"]
-    if action == Player.ACTION_ANTE: return action_history["amount"]
+    if action == Player.ACTION_FOLD_STR:
+        return 0
+    if action == Player.ACTION_CALL_STR:
+        return action_history["paid"]
+    if action == Player.ACTION_RAISE_STR:
+        return action_history["paid"]
+    if action == Player.ACTION_SMALL_BLIND:
+        return action_history["amount"]
+    if action == Player.ACTION_BIG_BLIND:
+        return action_history["amount"]
+    if action == Player.ACTION_ANTE:
+        return action_history["amount"]
     raise Exception("Unexpected type of action_history is passed => %s" % action_history)
 
 
