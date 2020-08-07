@@ -34,8 +34,7 @@ class GameEvaluator:
     def __create_prize_map(self, player_num):
         def update(d, other):
             d.update(other)
-
-        return d
+            return d
 
         return reduce(update, [{i: 0} for i in range(player_num)], {})
 
