@@ -146,7 +146,7 @@ class ActionCheckerTest(BaseUnitTest):
         legal_actions = ActionChecker.legal_actions(players, 0, 2.5)
         self.eq({'action': 'fold', 'amount': 0}, legal_actions[0])
         self.eq({'action': 'call', 'amount': 10}, legal_actions[1])
-        self.eq({'action': 'raise', 'amount': {'min': -1, 'max': -1}}, legal_actions[2])
+        self.eq({'action': 'raise', 'amount': {'min': 14, 'max': 14}}, legal_actions[2])
 
     def test_need_amount_after_ante(self):
         # situation => SB=$5 (players[0]), BB=$10 (players[1]), ANTE=$3
@@ -180,7 +180,7 @@ class ActionCheckerTest(BaseUnitTest):
 
         set_stack([12, 12, 12], players)
         actions = ActionChecker.legal_actions(players, 2, 5)
-        self.eq(-1, actions[2]['amount']['max'])
+        self.eq(12, actions[2]['amount']['max'])
 
         set_stack([10, 5, 12], players)
         self.eq(('raise', 15), ActionChecker.correct_action(players, 0, 5, 'raise', 15))
