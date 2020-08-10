@@ -155,14 +155,6 @@ class HandEvaluatorTest(BaseUnitTest):
 
         bit = HandEvaluator.eval_hand(hole, community)
         self.eq(HandEvaluator.STRAIGHT, HandEvaluator._HandEvaluator__mask_hand_strength(bit))
-
-        print(bit)
-        print(HandEvaluator.STRAIGHT)
-        print(HandEvaluator._HandEvaluator__mask_hand_high_rank(bit))
-        print(HandEvaluator._HandEvaluator__mask_hand_low_rank(bit))
-        print(HandEvaluator._HandEvaluator__mask_hole_high_rank(bit))
-        print(HandEvaluator._HandEvaluator__mask_hole_low_rank(bit))
-
         self.eq(4, HandEvaluator._HandEvaluator__mask_hand_high_rank(bit))
         self.eq(0, HandEvaluator._HandEvaluator__mask_hand_low_rank(bit))
         self.eq(4, HandEvaluator._HandEvaluator__mask_hole_high_rank(bit))
