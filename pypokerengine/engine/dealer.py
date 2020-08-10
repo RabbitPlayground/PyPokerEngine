@@ -45,14 +45,14 @@ class Dealer:
     def play_round(self, round_count, blind_amount, ante, table):
         state, msgs = RoundManager.start_new_round(round_count, blind_amount, ante, table)
         while True:
-            self.__message_check(msgs, state["street"])
-            if state["street"] != Const.Street.FINISHED:  # continue the round
+            self.__message_check(msgs, state['street'])
+            if state['street'] != Const.Street.FINISHED:  # continue the round
                 action, bet_amount = self.__publish_messages(msgs)
                 state, msgs = RoundManager.apply_action(state, action, bet_amount)
             else:  # finish the round after publish round result
                 self.__publish_messages(msgs)
                 break
-        return state["table"]
+        return state['table']
 
     def set_small_blind_amount(self, amount):
         self.small_blind_amount = amount
@@ -67,9 +67,9 @@ class Dealer:
         if round_count in blind_structure:
             update_info = blind_structure[round_count]
             msg = self.message_summarizer.summairze_blind_level_update(
-                round_count, ante, update_info["ante"], sb_amount, update_info["small_blind"])
+                round_count, ante, update_info['ante'], sb_amount, update_info['small_blind'])
             self.message_summarizer.print_message(msg)
-            ante, sb_amount = update_info["ante"], update_info["small_blind"]
+            ante, sb_amount = update_info['ante'], update_info['small_blind']
         return ante, sb_amount
 
     def __register_algorithm_to_message_handler(self, uuid, algorithm):
@@ -92,10 +92,10 @@ class Dealer:
 
     def __message_check(self, msgs, street):
         address, msg = msgs[-1]
-        invalid = msg["type"] != 'ask'
-        invalid &= street != Const.Street.FINISHED or msg["message"]["message_type"] == 'round_result'
+        invalid = msg['type'] != 'ask'
+        invalid &= street != Const.Street.FINISHED or msg['message']['message_type'] == 'round_result'
         if invalid:
-            raise Exception("Last message is not ask type. : %s" % msgs)
+            raise Exception('Last message is not ask type. : %s' % msgs)
 
     def __publish_messages(self, msgs):
         for address, msg in msgs[:-1]:
@@ -156,20 +156,20 @@ class Dealer:
 
     def __gen_config(self, max_round):
         return {
-            "initial_stack": self.initial_stack,
-            "max_round": max_round,
-            "small_blind_amount": self.small_blind_amount,
-            "ante": self.ante,
-            "blind_structure": self.blind_structure
+            'initial_stack': self.initial_stack,
+            'max_round': max_round,
+            'small_blind_amount': self.small_blind_amount,
+            'ante': self.ante,
+            'blind_structure': self.blind_structure
         }
 
     def __config_check(self):
         if self.small_blind_amount is None:
-            raise Exception("small_blind_amount is not set!!\
-          You need to call 'dealer.set_small_blind_amount' before.")
+            raise Exception('small_blind_amount is not set!!\
+          You need to call 'dealer.set_small_blind_amount' before.')
         if self.initial_stack is None:
-            raise Exception("initial_stack is not set!!\
-          You need to call 'dealer.set_initial_stack' before.")
+            raise Exception('initial_stack is not set!!\
+          You need to call 'dealer.set_initial_stack' before.')
 
     def __fetch_uuid(self):
         return self.uuid_list.pop()
@@ -180,7 +180,7 @@ class Dealer:
     def __generate_uuid(self):
         uuid_size = 22
         chars = [chr(code) for code in range(97, 123)]
-        return "".join([random.choice(chars) for _ in range(uuid_size)])
+        return ''.join([random.choice(chars) for _ in range(uuid_size)])
 
 
 class MessageHandler:
@@ -194,19 +194,19 @@ class MessageHandler:
     def process_message(self, address, msg):
         receivers = self.__fetch_receivers(address)
         for receiver in receivers:
-            if msg["type"] == 'ask':
-                return receiver.respond_to_ask(msg["message"])
-            elif msg["type"] == 'notification':
-                receiver.receive_notification(msg["message"])
+            if msg['type'] == 'ask':
+                return receiver.respond_to_ask(msg['message'])
+            elif msg['type'] == 'notification':
+                receiver.receive_notification(msg['message'])
             else:
-                raise ValueError("Received unexpected message which type is [%s]" % msg["type"])
+                raise ValueError('Received unexpected message which type is [%s]' % msg['type'])
 
     def __fetch_receivers(self, address):
         if address == -1:
             return self.algo_owner_map.values()
         else:
             if address not in self.algo_owner_map:
-                raise ValueError("Received message its address [%s] is unknown" % address)
+                raise ValueError('Received message its address [%s] is unknown' % address)
             return [self.algo_owner_map[address]]
 
 
@@ -232,8 +232,8 @@ class MessageSummarizer(object):
         if self.verbose == 0:
             return None
 
-        content = message["message"]
-        message_type = content["message_type"]
+        content = message['message']
+        message_type = content['message_type']
         if MessageBuilder.GAME_START_MESSAGE == message_type:
             return self.summarize_game_start(content)
         if MessageBuilder.ROUND_START_MESSAGE == message_type:
@@ -248,35 +248,35 @@ class MessageSummarizer(object):
             return self.summarize_game_result(content)
 
     def summarize_game_start(self, message):
-        base = "Started the game with player %s for %d round. (start stack=%s, small blind=%s)"
-        names = [player["name"] for player in message["game_information"]["seats"]]
-        rule = message["game_information"]["rule"]
-        return base % (names, rule["max_round"], rule["initial_stack"], rule["small_blind_amount"])
+        base = 'Started the game with player %s for %d round. (start stack=%s, small blind=%s)'
+        names = [player['name'] for player in message['game_information']['seats']]
+        rule = message['game_information']['rule']
+        return base % (names, rule['max_round'], rule['initial_stack'], rule['small_blind_amount'])
 
     def summarize_round_start(self, message):
-        base = "Started the round %d"
-        return base % message["round_count"]
+        base = 'Started the round %d'
+        return base % message['round_count']
 
     def summarize_street_start(self, message):
-        base = 'Street "%s" started. (community card = %s)'
-        return base % (message["street"], message["round_state"]["community_card"])
+        base = 'Street ' % s' started. (community card = %s)'
+        return base % (message['street'], message['round_state']['community_card'])
 
     def summarize_player_action(self, message):
-        base = '"%s" declared "%s:%s"'
-        players = message["round_state"]["seats"]
-        action = message["action"]
-        player_name = [player["name"] for player in players if player["uuid"] == action["player_uuid"]][0]
-        return base % (player_name, action["action"], action["amount"])
+        base = '' % s' declared ' % s: % s''
+        players = message['round_state']['seats']
+        action = message['action']
+        player_name = [player['name'] for player in players if player['uuid'] == action['player_uuid']][0]
+        return base % (player_name, action['action'], action['amount'])
 
     def summarize_round_result(self, message):
-        base = '"%s" won the round %d (stack = %s)'
-        winners = [player["name"] for player in message["winners"]]
-        stack = {player["name"]: player["stack"] for player in message["round_state"]["seats"]}
-        return base % (winners, message["round_count"], stack)
+        base = '' % s' won the round %d (stack = %s)'
+        winners = [player['name'] for player in message['winners']]
+        stack = {player['name']: player['stack'] for player in message['round_state']['seats']}
+        return base % (winners, message['round_count'], stack)
 
     def summarize_game_result(self, message):
         base = 'Game finished. (stack = %s)'
-        stack = {player["name"]: player["stack"] for player in message["game_information"]["seats"]}
+        stack = {player['name']: player['stack'] for player in message['game_information']['seats']}
         return base % stack
 
     def summairze_blind_level_update(self, round_count, old_ante, new_ante, old_sb_amount, new_sb_amount):
