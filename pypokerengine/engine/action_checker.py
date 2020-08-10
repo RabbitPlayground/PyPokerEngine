@@ -37,10 +37,10 @@ class ActionChecker:
         min_raise = self.__min_raise_amount(players, sb_amount)
         max_raise = players[player_pos].stack + players[player_pos].paid_sum()
         if max_raise < min_raise:
-            if players[player_pos].stack + players[player_pos].paid_sum() > (self.__fetch_last_raise(players) or {}).get('amount', 0):
-                min_raise = max_raise
-            else:
+            if self.agree_amount(players) >= max_raise:
                 min_raise = max_raise = -1
+            else:
+                min_raise = max_raise = players[player_pos].stack + players[player_pos].paid_sum()
         return [
             {'action': 'fold', 'amount': 0},
             {'action': 'call', 'amount': self.agree_amount(players)},
@@ -70,7 +70,7 @@ class ActionChecker:
 
     @classmethod
     def __is_illegal_raise(self, players, amount, sb_amount):
-        return self.__min_raise_amount(players, sb_amount) > amount
+        return self.__min_raise_amount(players, sb_amount) > amount or amount % sb_amount != 0
 
     @classmethod
     def __min_raise_amount(self, players, sb_amount):

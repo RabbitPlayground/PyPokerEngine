@@ -44,7 +44,7 @@ class ActionCheckerTest(BaseUnitTest):
         players = self.__setup_blind_players()
         self.true(ActionChecker._ActionChecker__is_illegal(players, 0, 2.5, 'raise', 14))
         self.false(ActionChecker._ActionChecker__is_illegal(players, 0, 2.5, 'raise', 15))
-        self.false(ActionChecker._ActionChecker__is_illegal(players, 0, 2.5, 'raise', 16))
+        self.false(ActionChecker._ActionChecker__is_illegal(players, 0, 2.5, 'raise', 17.5))
         self.eq(10, ActionChecker.need_amount_for_action(players[0], 15))
         self.eq(5, ActionChecker.need_amount_for_action(players[1], 15))
 
