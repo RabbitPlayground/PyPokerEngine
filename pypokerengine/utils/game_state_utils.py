@@ -45,9 +45,9 @@ def attach_hole_card(game_state, uuid, hole_card):
     deepcopy = deepcopy_game_state(game_state)
     target = [player for player in deepcopy['table'].seats.players if uuid == player.uuid]
     if len(target) == 0:
-        raise Exception('The player whose uuid is '%s' is not found in passed game_state.' % uuid)
+        raise Exception(f'The player whose uuid is {uuid} is not found in passed game_state.')
     if len(target) != 1:
-        raise Exception('Multiple players have uuid '%s'. So we cannot attach hole card.' % uuid)
+        raise Exception(f'Multiple players have uuid {uuid}. So we cannot attach hole card.')
     target[0].hole_card = hole_card
     return deepcopy
 
