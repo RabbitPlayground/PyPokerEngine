@@ -165,9 +165,9 @@ class Dealer:
 
     def __config_check(self):
         if self.small_blind_amount is None:
-            raise Exception(f'small_blind_amount is not set!! You need to call {dealer.set_small_blind_amount} before.')
+            raise Exception('small_blind_amount is not set!! You need to call "dealer.set_small_blind_amount" before.')
         if self.initial_stack is None:
-            raise Exception(f'initial_stack is not set!! You need to call {dealer.set_initial_stack} before.')
+            raise Exception('initial_stack is not set!! You need to call "dealer.set_initial_stack" before.')
 
     def __fetch_uuid(self):
         return self.uuid_list.pop()
