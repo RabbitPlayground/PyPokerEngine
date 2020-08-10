@@ -2,11 +2,6 @@
 
 Make PyPokerEngie use [deuces's](https://github.com/worldveil/deuces) card, deck and evaluator and increase performance
 
-[![Build Status](https://travis-ci.org/ishikota/PyPokerEngine.svg?branch=master)](https://travis-ci.org/ishikota/PyPokerEngine)
-[![Coverage Status](https://coveralls.io/repos/github/ishikota/PyPokerEngine/badge.svg?branch=master)](https://coveralls.io/github/ishikota/PyPokerEngine?branch=master)
-[![PyPI](https://img.shields.io/pypi/v/PyPokerEngine.svg?maxAge=2592000)](https://badge.fury.io/py/PyPokerEngine)
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/ishikota/kyoka/blob/master/LICENSE.md)
-
 Poker engine for AI development in Python
 
 ## Tutorial
@@ -24,7 +19,7 @@ Before start AI development, we need to install *PyPokerEngine*.
 You can use pip like this.
 
 ```python
-pip install git+git://github.com/YanickSchraner/PyPokerEngine
+pip install git+git://github.com/ItzRabbs/PyPokerEngine
 ```
 
 This library supports Python 2 (2.7) and Python3 (3.5).
