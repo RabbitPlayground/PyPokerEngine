@@ -150,10 +150,10 @@ class DealerTest(BaseUnitTest):
         dealer.set_blind_structure(blind_structure)
         algos = [FoldMan() for _ in range(3)]
         [dealer.register_player('algo-%d' % idx, algo) for idx, algo in enumerate(algos)]
-       
-        def fetch_stacks(res): 
+
+        def fetch_stacks(res):
             return [p['stack'] for p in res['message']['game_information']['seats']]
-       
+
         result = dealer.start_game(1)
         self.eq(fetch_stacks(result), [92, 111, 97])
         result = dealer.start_game(2)

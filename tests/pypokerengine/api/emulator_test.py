@@ -4,8 +4,7 @@ from functools import reduce
 from nose.tools import raises
 from tests.base_unittest import BaseUnitTest
 from pypokerengine.api.emulator import Emulator, Event
-from pypokerengine.utils.game_state_utils import restore_game_state, attach_hole_card,\
-    attach_hole_card_from_deck, replace_community_card_from_deck
+from pypokerengine.utils.game_state_utils import restore_game_state, attach_hole_card, attach_hole_card_from_deck, replace_community_card_from_deck
 from pypokerengine.engine.card import Card
 from pypokerengine.engine.pay_info import PayInfo
 from pypokerengine.engine.game_evaluator import GameEvaluator

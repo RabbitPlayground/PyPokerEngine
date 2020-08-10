@@ -1,8 +1,6 @@
 from nose.tools import raises
 from tests.base_unittest import BaseUnitTest
-from pypokerengine.utils.game_state_utils import restore_game_state,\
-    attach_hole_card, replace_community_card,\
-    attach_hole_card_from_deck, replace_community_card_from_deck
+from pypokerengine.utils.game_state_utils import restore_game_state, attach_hole_card, replace_community_card, attach_hole_card_from_deck, replace_community_card_from_deck
 from pypokerengine.engine.card import Card
 from pypokerengine.engine.poker_constants import PokerConstants as Const
 

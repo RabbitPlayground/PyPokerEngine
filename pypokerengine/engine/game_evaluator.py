@@ -106,8 +106,7 @@ class GameEvaluator:
 
     @classmethod
     def __is_eligible(self, player, allin_amount):
-        return player.pay_info.amount >= allin_amount and \
-            player.pay_info.status != PayInfo.FOLDED
+        return player.pay_info.amount >= allin_amount and player.pay_info.status != PayInfo.FOLDED
 
     @classmethod
     def __fetch_allin_payinfo(self, players):
