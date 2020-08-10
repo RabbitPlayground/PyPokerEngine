@@ -53,11 +53,11 @@ class ActionChecker:
         if action == 'fold':
             return False
         elif action == 'call':
-            print(action, self.__is_short_of_money(players[player_pos], amount), self.__is_illegal_call(players, amount))
+            # print(action, self.__is_short_of_money(players[player_pos], amount), self.__is_illegal_call(players, amount))
 
             return self.__is_short_of_money(players[player_pos], amount) or self.__is_illegal_call(players, amount)
         elif action == 'raise':
-            print(action, self.__is_short_of_money(players[player_pos], amount), self.__is_illegal_raise(players, amount, sb_amount))
+            # print(action, self.__is_short_of_money(players[player_pos], amount), self.__is_illegal_raise(players, amount, sb_amount))
 
             return self.__is_short_of_money(players[player_pos], amount) or self.__is_illegal_raise(players, amount, sb_amount)
 
@@ -76,13 +76,13 @@ class ActionChecker:
 
         if (raise_ is not None):
             if (raise_['action'] == 'BIGBLIND'):
-                print('Min Amount (1): ', sb_amount * 4)
+                # print('Min Amount (1): ', sb_amount * 4)
                 return sb_amount * 4
             else:
-                print('Min Amount (2): ', raise_['amount'] + raise_['add_amount'])
+                # print('Min Amount (2): ', raise_['amount'] + raise_['add_amount'])
                 return raise_['amount'] + raise_['add_amount']
         else:
-            print('Min Amount (3): ', sb_amount * 2)
+            # print('Min Amount (3): ', sb_amount * 2)
             return sb_amount * 2
 
     @classmethod
