@@ -13,8 +13,8 @@ class ActionUtilsTest(BaseUnitTest):
         self.eq(
             [
                 {'action': 'fold', 'amount': 0},
-                {'action': 'call', 'amount': 10},
-                {'action': 'raise', 'amount': {'min': 15, 'max': 100}}
+                {'action': 'call', 'amount': 10, 'paid': 5},
+                {'action': 'raise', 'amount': {'min': 15, 'max': 100}, 'paid': 5}
             ], legal_actions)
 
     def test_is_legal_action(self):
