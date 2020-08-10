@@ -91,8 +91,8 @@ class GameEvaluator:
     @classmethod
     def __calc_sidepot_size(self, players, smaller_side_pots, allin_amount):
         def add_chip_for_pot(pot, player):
-            return pot + min(allin_amount, player.pay_info.amount)
-
+             return pot + min(allin_amount, player.pay_info.amount)
+       
         target_pot_size = reduce(add_chip_for_pot, players, 0)
         return target_pot_size - self.__get_sidepots_sum(smaller_side_pots)
 

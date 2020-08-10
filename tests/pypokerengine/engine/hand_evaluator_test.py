@@ -18,11 +18,11 @@ class HandEvaluatorTest(BaseUnitTest):
             Card(Card.DIAMOND, 2)
         ]
         info = HandEvaluator.gen_hand_rank_info(hole, community)
-        self.eq("HIGHCARD", info["hand"]["strength"])
-        self.eq(9, info["hand"]["high"])
-        self.eq(2, info["hand"]["low"])
-        self.eq(9, info["hole"]["high"])
-        self.eq(2, info["hole"]["low"])
+        self.eq('HIGHCARD', info['hand']['strength'])
+        self.eq(9, info['hand']['high'])
+        self.eq(2, info['hand']['low'])
+        self.eq(9, info['hole']['high'])
+        self.eq(2, info['hole']['low'])
 
     def test_eval_high_card(self):
         community = [
