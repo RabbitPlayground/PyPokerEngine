@@ -165,11 +165,9 @@ class Dealer:
 
     def __config_check(self):
         if self.small_blind_amount is None:
-            raise Exception('small_blind_amount is not set!!\
-          You need to call 'dealer.set_small_blind_amount' before.')
+            raise Exception(f'small_blind_amount is not set!! You need to call {dealer.set_small_blind_amount} before.')
         if self.initial_stack is None:
-            raise Exception('initial_stack is not set!!\
-          You need to call 'dealer.set_initial_stack' before.')
+            raise Exception(f'initial_stack is not set!! You need to call {dealer.set_initial_stack} before.')
 
     def __fetch_uuid(self):
         return self.uuid_list.pop()
@@ -258,18 +256,18 @@ class MessageSummarizer(object):
         return base % message['round_count']
 
     def summarize_street_start(self, message):
-        base = 'Street ' % s' started. (community card = %s)'
+        base = 'Street "%s" started. (community card = %s)'
         return base % (message['street'], message['round_state']['community_card'])
 
     def summarize_player_action(self, message):
-        base = '' % s' declared ' % s: % s''
+        base = '"%s declared "%s: %s"'
         players = message['round_state']['seats']
         action = message['action']
         player_name = [player['name'] for player in players if player['uuid'] == action['player_uuid']][0]
         return base % (player_name, action['action'], action['amount'])
 
     def summarize_round_result(self, message):
-        base = '' % s' won the round %d (stack = %s)'
+        base = '"%s" won the round %d (stack = %s)'
         winners = [player['name'] for player in message['winners']]
         stack = {player['name']: player['stack'] for player in message['round_state']['seats']}
         return base % (winners, message['round_count'], stack)
