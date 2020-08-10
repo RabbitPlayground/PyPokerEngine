@@ -340,14 +340,6 @@ class RoundManagerTest(BaseUnitTest):
         state, _ = RoundManager.apply_action(state, 'raise', 125)
         state, _ = RoundManager.apply_action(state, 'call', 125)
         state, _ = RoundManager.apply_action(state, 'fold', 0)
-
-        print('')
-        for street, moves in _[0][1]['message']['action_histories']['action_histories'].items():
-            print(street)
-
-            for move in moves:
-                print('', move)
-
         state, _ = RoundManager.apply_action(state, 'fold', 0)
         self.eq(Const.Street.FINISHED, state['street'])
 
