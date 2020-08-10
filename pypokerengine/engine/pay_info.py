@@ -1,6 +1,6 @@
 class PayInfo:
 
-    PAY_TILL_END = 0
+    PLAY_TILL_END = 0
     ALLIN = 1
     FOLDED = 2
 

@@ -10,7 +10,7 @@ class SidepotTest(BaseUnitTest):
 
     def test_case1(self):
         players = {
-            'A': self.__create_player_with_pay_info('A', 50, PayInfo.PAY_TILL_END),
+            'A': self.__create_player_with_pay_info('A', 50, PayInfo.PLAY_TILL_END),
             'B': self.__create_player_with_pay_info('B', 20, PayInfo.ALLIN),
             'C': self.__create_player_with_pay_info('C', 30, PayInfo.ALLIN),
         }
@@ -24,8 +24,8 @@ class SidepotTest(BaseUnitTest):
 
     def test_case2(self):
         players = {
-            'A': self.__create_player_with_pay_info('A', 10, PayInfo.PAY_TILL_END),
-            'B': self.__create_player_with_pay_info('B', 10, PayInfo.PAY_TILL_END),
+            'A': self.__create_player_with_pay_info('A', 10, PayInfo.PLAY_TILL_END),
+            'B': self.__create_player_with_pay_info('B', 10, PayInfo.PLAY_TILL_END),
             'C': self.__create_player_with_pay_info('C', 7, PayInfo.ALLIN),
         }
         pots = GameEvaluator.create_pot(players.values())
@@ -38,9 +38,9 @@ class SidepotTest(BaseUnitTest):
     def test_case3(self):
         players = {
             'A': self.__create_player_with_pay_info('A', 20, PayInfo.FOLDED),
-            'B': self.__create_player_with_pay_info('B', 30, PayInfo.PAY_TILL_END),
+            'B': self.__create_player_with_pay_info('B', 30, PayInfo.PLAY_TILL_END),
             'C': self.__create_player_with_pay_info('C', 7, PayInfo.ALLIN),
-            'D': self.__create_player_with_pay_info('D', 30, PayInfo.PAY_TILL_END),
+            'D': self.__create_player_with_pay_info('D', 30, PayInfo.PLAY_TILL_END),
         }
         pots = GameEvaluator.create_pot(players.values())
         self.eq(2, len(pots))
@@ -52,9 +52,9 @@ class SidepotTest(BaseUnitTest):
     def test_case4(self):
         players = {
             'A': self.__create_player_with_pay_info('A', 12, PayInfo.ALLIN),
-            'B': self.__create_player_with_pay_info('B', 30, PayInfo.PAY_TILL_END),
+            'B': self.__create_player_with_pay_info('B', 30, PayInfo.PLAY_TILL_END),
             'C': self.__create_player_with_pay_info('C', 7, PayInfo.ALLIN),
-            'D': self.__create_player_with_pay_info('D', 30, PayInfo.PAY_TILL_END),
+            'D': self.__create_player_with_pay_info('D', 30, PayInfo.PLAY_TILL_END),
         }
         pots = GameEvaluator.create_pot(players.values())
         self.eq(3, len(pots))
@@ -67,9 +67,9 @@ class SidepotTest(BaseUnitTest):
     def test_case5(self):
         players = {
             'A': self.__create_player_with_pay_info('A', 5, PayInfo.ALLIN),
-            'B': self.__create_player_with_pay_info('B', 10, PayInfo.PAY_TILL_END),
+            'B': self.__create_player_with_pay_info('B', 10, PayInfo.PLAY_TILL_END),
             'C': self.__create_player_with_pay_info('C', 8, PayInfo.ALLIN),
-            'D': self.__create_player_with_pay_info('D', 10, PayInfo.PAY_TILL_END),
+            'D': self.__create_player_with_pay_info('D', 10, PayInfo.PLAY_TILL_END),
             'E': self.__create_player_with_pay_info('E', 2, PayInfo.FOLDED)
         }
         pots = GameEvaluator.create_pot(players.values())

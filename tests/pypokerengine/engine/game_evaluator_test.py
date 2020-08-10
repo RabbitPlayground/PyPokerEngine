@@ -14,7 +14,7 @@ class GameEvaluatorTest(BaseUnitTest):
 
     def test_judge_without_allin(self):
         def gen_player(acc, _):
-            return acc + [self.__create_player_with_pay_info('', 5, PayInfo.PAY_TILL_END)]
+            return acc + [self.__create_player_with_pay_info('', 5, PayInfo.PLAY_TILL_END)]
         players = reduce(gen_player, range(3), [])
 
         table = self.__setup_table(players)
@@ -27,7 +27,7 @@ class GameEvaluatorTest(BaseUnitTest):
 
     def test_judge_without_allin_but_winner_folded(self):
         def gen_player(acc, _):
-            return acc + [self.__create_player_with_pay_info('', 5, PayInfo.PAY_TILL_END)]
+            return acc + [self.__create_player_with_pay_info('', 5, PayInfo.PLAY_TILL_END)]
 
         players = reduce(gen_player, range(3), [])
         players[1].pay_info.update_to_fold()
@@ -115,7 +115,7 @@ class GameEvaluatorTest(BaseUnitTest):
 
     def __setup_players_for_judge(self):
         return [
-            self.__create_player_with_pay_info('A', 50, PayInfo.PAY_TILL_END),
+            self.__create_player_with_pay_info('A', 50, PayInfo.PLAY_TILL_END),
             self.__create_player_with_pay_info('B', 20, PayInfo.ALLIN),
             self.__create_player_with_pay_info('C', 30, PayInfo.ALLIN)
         ]

@@ -172,7 +172,7 @@ def _restore_pay_info_status_on_players(players, players_state):
 
 
 _pay_info_state_translator = {
-    DataEncoder.PAY_INFO_PAY_TILL_END_STR: PayInfo.PAY_TILL_END,
+    DataEncoder.PAY_INFO_PLAY_TILL_END_STR: PayInfo.PLAY_TILL_END,
     DataEncoder.PAY_INFO_ALLIN_STR: PayInfo.ALLIN,
     DataEncoder.PAY_INFO_FOLDED_STR: PayInfo.FOLDED
 }

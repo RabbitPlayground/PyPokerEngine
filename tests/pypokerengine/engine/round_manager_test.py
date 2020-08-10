@@ -245,7 +245,7 @@ class RoundManagerTest(BaseUnitTest):
             self.eq([], table.get_community_card())
             self.eq([], player.hole_card)
             self.eq([], player.action_histories)
-            self.eq(PayInfo.PAY_TILL_END, player.pay_info.status)
+            self.eq(PayInfo.PLAY_TILL_END, player.pay_info.status)
 
     def test_message_skip_when_only_one_player_is_active(self):
         state, _ = self.__start_round()

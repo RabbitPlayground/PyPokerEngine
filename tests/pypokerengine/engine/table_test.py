@@ -45,7 +45,7 @@ class TableTest(BaseUnitTest):
         self.table.reset()
         self.eq(0, len(self.player.hole_card))
         self.eq(0, len(self.player.action_histories))
-        self.eq(PayInfo.PAY_TILL_END, self.player.pay_info.status)
+        self.eq(PayInfo.PLAY_TILL_END, self.player.pay_info.status)
 
     @raises(ValueError)
     def test_community_card_exceed_size(self):
