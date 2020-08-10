@@ -43,8 +43,8 @@ class ActionChecker:
                 min_raise = max_raise = players[player_pos].stack + players[player_pos].paid_sum()
         return [
             {'action': 'fold', 'amount': 0},
-            {'action': 'call', 'amount': self.agree_amount(players)},
-            {'action': 'raise', 'amount': {'min': min_raise, 'max': max_raise}}
+            {'action': 'call', 'amount': self.agree_amount(players), 'paid': players[player_pos].paid_sum()},
+            {'action': 'raise', 'amount': {'min': min_raise, 'max': max_raise}, 'paid': players[player_pos].paid_sum()}
         ]
 
     @classmethod

@@ -466,7 +466,7 @@ class EventTest(BaseUnitTest):
 
 
 class TwoPlayerSample:
-    valid_actions = [{'action': 'fold', 'amount': 0}, {'action': 'call', 'amount': 15}, {'action': 'raise', 'amount': {'max': 80, 'min': 30}}]
+    valid_actions = [{'action': 'fold', 'amount': 0}, {'action': 'call', 'amount': 15, 'paid': 0}, {'action': 'raise', 'amount': {'max': 80, 'min': 30}, 'paid': 0}]
     hole_card = ['Ac', '3s']
     round_state = {
         'dealer_btn': 0,
@@ -531,7 +531,7 @@ class TwoPlayerSample:
 
 
 class ThreePlayerGameStateSample:
-    valid_actions = [{'action': 'fold', 'amount': 0}, {'action': 'call', 'amount': 10}, {'action': 'raise', 'amount': {'max': 35, 'min': 20}}]
+    valid_actions = [{'action': 'fold', 'amount': 0}, {'action': 'call', 'amount': 10, 'paid': 0}, {'action': 'raise', 'amount': {'max': 35, 'min': 20}, 'paid': 0}]
     hole_card = ['9s', '5c']
     round_state = {
         'dealer_btn': 1,

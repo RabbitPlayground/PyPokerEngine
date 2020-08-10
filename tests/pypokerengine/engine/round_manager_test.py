@@ -216,7 +216,7 @@ class RoundManagerTest(BaseUnitTest):
 
     def test_table_reset_after_showdown(self):
         mock_return = [1, 0] * 3
-        with patch('pypokerengine.engine.hand_evaluator.HandEvaluator.eval_hand', side_effect=mock_return), patch('pypokerengine.engine.message_builder.MessageBuilder.build_game_update_message', return_value='boo'),                patch('pypokerengine.engine.message_builder.MessageBuilder.build_round_result_message', return_value='foo'):
+        with patch('pypokerengine.engine.hand_evaluator.HandEvaluator.eval_hand', side_effect=mock_return), patch('pypokerengine.engine.message_builder.MessageBuilder.build_game_update_message', return_value='boo'), patch('pypokerengine.engine.message_builder.MessageBuilder.build_round_result_message', return_value='foo'):
             state, _ = self.__start_round()
             state, _ = RoundManager.apply_action(state, 'fold', 0)
             state, _ = RoundManager.apply_action(state, 'call', 10)
