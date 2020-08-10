@@ -16,3 +16,10 @@ class BaseUnitTest(unittest.TestCase):
 
     def false(self, target):
         return self.assertFalse(target)
+
+    def error(self, target):
+        try:
+            target()
+            return False
+        except Exception as ex:
+            return True

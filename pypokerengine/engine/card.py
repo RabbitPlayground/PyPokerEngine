@@ -33,7 +33,6 @@ class Card:
         self.rank = rank
 
     def __eq__(self, other):
-        print(str(self), str(other))
         return self.suit == other.suit and self.rank == other.rank
 
     def __str__(self):
