@@ -7,7 +7,7 @@ from pypokerengine.engine.game_evaluator import GameEvaluator
 
 class DataEncoder:
 
-    PAY_INFO_PAY_TILL_END_STR = 'participating'
+    PAY_INFO_PLAY_TILL_END_STR = 'participating'
     PAY_INFO_ALLIN_STR = 'allin'
     PAY_INFO_FOLDED_STR = 'folded'
 
@@ -114,8 +114,8 @@ class DataEncoder:
 
     @classmethod
     def __payinfo_to_str(self, status):
-        if status == PayInfo.PAY_TILL_END:
-            return self.PAY_INFO_PAY_TILL_END_STR
+        if status == PayInfo.PLAY_TILL_END:
+            return self.PAY_INFO_PLAY_TILL_END_STR
         if status == PayInfo.ALLIN:
             return self.PAY_INFO_ALLIN_STR
         if status == PayInfo.FOLDED:

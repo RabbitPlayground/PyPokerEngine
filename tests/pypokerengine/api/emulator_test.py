@@ -323,7 +323,7 @@ class EmulatorTest(BaseUnitTest):
         self.eq(stacks[0] - sb_amount - ante, game_state['table'].seats.players[0].stack)
         self.eq(stacks[2] - sb_amount * 2 - ante, game_state['table'].seats.players[2].stack)
         self.eq(PayInfo.FOLDED, game_state['table'].seats.players[1].pay_info.status)
-        self.eq(PayInfo.PAY_TILL_END, game_state['table'].seats.players[0].pay_info.status)
+        self.eq(PayInfo.PLAY_TILL_END, game_state['table'].seats.players[0].pay_info.status)
         self.eq(sb_amount * 3 + ante * 2, GameEvaluator.create_pot(game_state['table'].seats.players)[0]['amount'])
 
     def test_start_new_round_exclude_no_money_players2(self):

@@ -144,9 +144,9 @@ def setup_player_with_payinfo(idx, name, amount, status):
 
 def setup_players_for_pot():
     p1 = setup_player_with_payinfo(0, 'A', 5, PayInfo.ALLIN)
-    p2 = setup_player_with_payinfo(1, 'B', 10, PayInfo.PAY_TILL_END)
+    p2 = setup_player_with_payinfo(1, 'B', 10, PayInfo.PLAY_TILL_END)
     p3 = setup_player_with_payinfo(2, 'C', 8, PayInfo.ALLIN)
-    p4 = setup_player_with_payinfo(3, 'D', 10, PayInfo.PAY_TILL_END)
+    p4 = setup_player_with_payinfo(3, 'D', 10, PayInfo.PLAY_TILL_END)
     p5 = setup_player_with_payinfo(4, 'E', 2, PayInfo.FOLDED)
     return [p1, p2, p3, p4, p5]
 
