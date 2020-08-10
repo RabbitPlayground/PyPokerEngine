@@ -38,9 +38,9 @@ class GameEvaluatorTest(BaseUnitTest):
             self.eq(2, len(winner))
             self.eq('HIGHCARD', hand_info[0]['hand']['hand']['strength'])
             self.eq('HIGHCARD', hand_info[1]['hand']['hand']['strength'])
-            self.eq(7, prize_map[0])
+            self.eq(7.5, prize_map[0])
             self.eq(0, prize_map[1])
-            self.eq(7, prize_map[2])
+            self.eq(7.5, prize_map[2])
 
     ''' B win (hand rank = B > C > A) '''
 
