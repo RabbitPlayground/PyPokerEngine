@@ -160,8 +160,7 @@ def visualize_player_with_badge(player, rs):
 
 
 def _is_next_player(player, rs):
-    return rs and not isinstance(rs['next_player'], str)\
-        and player == rs['seats'][rs['next_player']]
+    return rs and not isinstance(rs['next_player'], str) and player == rs['seats'][rs['next_player']]
 
 
 def _gen_badge(is_sb, is_bb, is_next):
